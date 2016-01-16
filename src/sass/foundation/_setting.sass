@@ -1,0 +1,22 @@
+//mixin
+=clearfix
+	&:after
+		content: " "
+		display: table
+		clear: both
+
+=hoveColor
+	color: $hover
+
+=accentColor
+	padding: 2px 4px
+	border-radius: 3px
+	background: $accent
+	font-weight: bold
+	font-size: 13px
+
+
+//変数
+$default: #4A4A4A
+$accent: #F7F7F7
+$hover: #00BBDD
