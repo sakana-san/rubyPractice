@@ -64,54 +64,94 @@ require 'date'
 # puts "氏名: #{db.name}、年齢: #{db.price}円"
 
 
+#10章
+# class BookInfo
 
-class BookInfo
+# 	def initialize(title, author, page, publish_date)
+# 		@title = title
+# 		@author = author
+# 		@page = page
+# 		@publish_date = publish_date
+# 	end
 
-	def initialize(title, author, page, publish_date)
-		@title = title
-		@author = author
-		@page = page
-		@publish_date = publish_date
-	end
+# 	attr_accessor :title, :author, :page, :publish_date
 
-	attr_accessor :title, :author, :page, :publish_date
+# 	def to_s
+# 		"#{@title}, #{@author}, #{@page}, #{@publish_date},"
+# 	end
 
-	def to_s
-		"#{@title}, #{@author}, #{@page}, #{@publish_date},"
-	end
-
-	def toFormattedString( sep = "\n")
-		"書籍名: #{@title}#{sep}著者名: #{@author}#{sep}ページ数: #{@page}#{sep}購入日: #{@publish_date}#{sep}"
+# 	def toFormattedString( sep = "\n")
+# 		"書籍名: #{@title}#{sep}著者名: #{@author}#{sep}ページ数: #{@page}#{sep}購入日: #{@publish_date}#{sep}"
 		
+# 	end
+# end 
+
+
+# book_info = BookInfo.new(
+# 	'ドラゴンボール',
+# 	'鳥山明',
+# 	500,
+# 	Date.new(2016, 06 ,19)
+# )
+
+
+# puts book_info.to_s
+
+# book_info.title = 'ゲレクシス'
+# book_info.author = '古谷実'
+
+# puts book_info.toFormattedString("/")
+
+#11章 ハッシュ
+student = {}
+friends = {
+	tarou:'tanakaTarou',
+	itirou: 'suzukiItirou',
+	neo: 'neoSubaru'
+}
+friends = Hash.new
+friends[:shin] = '山本真'
+
+puts friends
+
+
+str = "Twinkle, twinkle, little star,
+How I wonder what you are.
+Up above the world so high,
+Like a diamond in the sky.
+Twinkle, twinkle, little star,
+How I wonder what you are.."
+
+lines = str.split(/\n/)
+
+puts "youが含まれている行"
+
+lines.each { |line|
+	if line =~ /[Yy]ou/ then
+		puts line
 	end
-end 
+}
 
+puts ""
 
-book_info = BookInfo.new(
-	'ドラゴンボール',
-	'鳥山明',
-	500,
-	Date.new(2016, 06 ,19)
-)
+puts "行末にカンマが含まれていた行"
 
+lines.each { |line|
+	if line =~ /,$/ then
+		puts line
+	end
+}
 
-puts book_info.to_s
+puts ""
 
-book_info.title = 'ゲレクシス'
-book_info.author = '古谷実'
+puts "'i'がきて2文字おいて'l'がくる文字列が含まれる行"
 
-puts "書籍名: #{book_info.title}"
-puts "著者: #{book_info.author}"
-puts "ページ: #{book_info.page.to_s}"
-puts "購入日: #{book_info.publish_date.to_s}"
+lines.each { |line|
+	if line =~ /i..l/ then
+		puts line
+	end
 
-puts book_info.toFormattedString("/")
-
-
-
-
-
-
+}
 
 
 
