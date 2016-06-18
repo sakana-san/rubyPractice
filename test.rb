@@ -41,6 +41,24 @@ require 'date'
 # 		@price = price
 # 	end
 
+# #name属性のゲッターメソッド
+# def name
+# 	@name
+# end
+# #age属性のゲッターメソッド
+# def age
+# 	@age
+# end
+
+# #name属性のセッターメソッド
+# def name=(value)
+# 	@name = value
+# end
+# #age属性のセッターメソッド
+# def age=(value)
+# 	@age = value
+# end
+
 # 	attr_accessor :name, :price
 
 # 	def to_s
