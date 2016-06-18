@@ -1,107 +1,131 @@
 # -*- coding: utf-8 -*-
-# puts "ようこそorint"
-# puts '藤沢へ'
-# puts 'hello' << 'world'
-
-# puts 'さよなら' .concat 'バイバイ';
-
-# h = '僕は';
-# w = '田中です'
-
-# puts h << w
-# prime100 = 541;
-# print "100の素数は#{prime100}です"
-
-
-# require 'date'
-
-# print Date.new(2016,3,3) .to_s
-
-
-# train_types = ['local', 'lapid', 'express']
-
-# exam_scores = [40, 35, 42, 37, 48]
-# fruits_prices = [['apple', 200], ['orenge', 100], ['melon', 600]]
-
-# fruits_prices.each { |fp|
-# 	puts "名前: #{fp[0]}, 値段: #{fp[1]}円"
-# }
-
-# sum = 0
-# fruits_prices.each{ |fp| sum += fp[1]}
-# puts "一個ずつ買うと全部でsum円です"
-
-# #　表示したいデータを作成する
-# title = '重版出来'
-# author = 'TBSテレビドラマ制作委員会'
-# leading_actor = '黒沢 心'
-# Airdate = '火曜日 夜21時'
-
-# ##作成したデータを表示
-# puts title
-# puts author
-# puts leading_actor
-# puts Airdate
-
-# puts '番組名: ' + title
-# puts '製作者: ' + author
-# puts '主役: ' + leading_actor
-# puts '放送日: ' + Airdate
-
-# #表示した蔵所データ作成
-# pages = 100
-# price = 2890
-# tax = 0.08
-# purchase_price = price * (1 + tax)
-
-# #蔵所データ表示
-# puts 'ページ数' + pages.to_s + 'ページ'
-# puts '本体価格' + price.to_s + '円'
-# puts '購入費用' + purchase_price.to_s + '円'
-
-# require 'date'
-
-# publish_date = Date.new(2016, 6, 11)
-# mon_name = Date::MONTHNAMES[publish_date.mon]
-# abbr_mon_name = Date::ABBR_MONTHNAMES[publish_date.mon]
-
-# puts '出版年: ' + publish_date.year.to_s
-# puts '出版月: ' + mon_name
-# puts '購入日: ' + abbr_mon_name
-
-#蔵所データ本番
 require 'date'
 
-#表示したいデータを作成する
-titles = [
- '重版出来',
- 'ピーヴの遷移'
-]
-authors = ['黒沢　心', '中田 伯']
-phonetic = ['くろさわ こころ', 'なかた はく']
-publishers = [
- '週刊バイブス', '興信館'
-]
-pages = [100, 150]
-prices = [580, 620]
-purchase_prices = [650, 700]
+# titles = [
+# 	'ドラゴンボール',
+# 	'寄生獣'
+# ]
+# author = [
+# 	'鳥山明',
+# 	'岩本明宏',
+# ]
+# yomi = [
+# 	'とりやまあきら',
+# 	'いわもとあきひろ'
+# ]
+# publishers = [
+# 	'集英社',
+# 	'講談社'
+# ]
+# pages = [177, 344]
+# prices = [500, 1000]
 
-isbn_10s = ['4883732088', '4883733458']
-publish_dates = [Date.new(2016, 6, 11), Date.new(2016, 6, 18)]
+# publish_date = [
+# 	Date.new( 2016, 6, 19),
+# 	Date.new( 2016, 8, 30),
+# ]
 
-#蔵所データを表示させる
+# titles.size.times{|i| 
+# 	puts '書籍名: ' + titles[i]
+# 	puts '著者: ' + author[i]
+# 	puts 'かな: ' + yomi[i]
+# 	puts '出版社: ' + publishers[i]
+# 	puts 'ページ: ' + pages[i].to_s
+# 	puts '値段: ' + prices[i].to_s
+# 	puts '購入日: ' + publish_date[i].to_s
+# }
 
-titles.size.times{ |i|
-puts '--------------------------------------'
-puts '書籍名: ' + titles[i]
-puts '著者名: ' + authors[i]
-puts '出版社: ' + publishers[i]
-puts 'ページ数: ' + pages[i].to_s
-puts '値段' + prices[i].to_s
-puts '購入価格' + purchase_prices[i].to_s
-puts 'ISBN' + isbn_10s[i]
-puts '購入日' + publish_dates[i].to_s
+# class Manga
+# 	def initialize(name, price)
+# 		@name = name
+# 		@price = price
+# 	end
 
-}
+# 	attr_accessor :name, :price
+
+# 	def to_s
+# 		"#{@name}, #{@price}"
+# 	end
+# end
+
+# db = Manga.new('ドラゴンボール: ', 500)
+# ch = Manga.new('シティーハンター:', 500)
+
+# puts db.to_s
+# puts ch.to_s
+
+# puts "氏名: #{db.name}、年齢: #{db.price}円"
+# puts "氏名: #{ch.name}、年齢: #{ch.price}円"
+
+# db.name = 'オラ孫悟空'
+# db.price = 1000
+
+
+# puts "氏名: #{db.name}、年齢: #{db.price}円"
+
+
+
+class BookInfo
+
+	def initialize(title, author, page, publish_date)
+		@title = title
+		@author = author
+		@page = page
+		@publish_date = publish_date
+	end
+
+	attr_accessor :title, :author, :page, :publish_date
+
+	def to_s
+		"#{@title}, #{@author}, #{@page}, #{@publish_date},"
+	end
+
+	def toFormattedString( sep = "\n")
+		"書籍名: #{@title}#{sep}著者名: #{@author}#{sep}ページ数: #{@page}#{sep}購入日: #{@publish_date}#{sep}"
+		
+	end
+end 
+
+
+book_info = BookInfo.new(
+	'ドラゴンボール',
+	'鳥山明',
+	500,
+	Date.new(2016, 06 ,19)
+)
+
+
+puts book_info.to_s
+
+book_info.title = 'ゲレクシス'
+book_info.author = '古谷実'
+
+puts "書籍名: #{book_info.title}"
+puts "著者: #{book_info.author}"
+puts "ページ: #{book_info.page.to_s}"
+puts "購入日: #{book_info.publish_date.to_s}"
+
+puts book_info.toFormattedString("/")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
