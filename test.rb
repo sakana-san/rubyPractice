@@ -2,6 +2,79 @@
 require 'date'
 
 
+class OsakaToin
+	def initialize(name, age, position, number)
+		@name = name
+		@age = age
+		@position = position
+		@number = number
+	end
+	attr_accessor :name, :age, :position, :number
+	def to_s
+		"#{@name}, #{@age}, #{@position}, #{@number}, "
+	end
+	def toFormattedString(sep = "\n")
+		"名前: #{@name}#{sep} 年齢: #{@age}#{sep} ポジション: #{@position}#{sep} 背番号: #{@number}#{sep}"
+	end
+end
+
+class OsakaToinPlayer
+	def initialize
+		@player = {}
+	end
+	def setUpPlayer
+		@player['大阪桐蔭投手: 選手紹介'] = OsakaToin.new("根尾昴", "15歳", "投手", "18番")
+		@player["大阪桐蔭内野手: 選手紹介"] = OsakaToin.new("永広", "18歳", "二塁手", "5番")
+	end
+	def addOsakaToinPlayer
+		osakaToin = OsakaToin.new("", "", "", "")
+		print "\n"
+		print "キー"
+		key = gets.chomp
+		print "名前:"
+		osakaToin.name = gets.chomp
+		print "年齢:"
+		osakaToin.age = gets.chomp
+		print "ポジション:"
+		osakaToin.position = gets.chomp
+		print "背番号:"
+		osakaToin.number = gets.chomp
+		@player[key] = osakaToin
+	end
+	def listAllPlayer
+		puts "\n---------------"
+		@player.each { |key, value|
+			print value.toFormattedString()
+		}
+		puts "\n---------------"
+	end
+	def run
+		while true
+			print "
+				1. 選手の登録
+				2. 選手の表示
+				9. 終了
+				番号を選んでください(1,2,9)："
+			num = gets.chomp
+			case
+			when '1' == num
+				addOsakaToinPlayer
+			when '2' == num
+				listAllPlayer
+			when '9' == num
+				break;
+			else
+			end
+		end
+	end
+end
+
+osakaToinPlayer = OsakaToinPlayer.new
+
+osakaToinPlayer.setUpPlayer
+osakaToinPlayer.run
+
+
 #ゲッター、名前　年齢を個別に表示できる
 #セッター、名前、年齢を変更できる
 #ゲッターがないとセッターが表示されたない
