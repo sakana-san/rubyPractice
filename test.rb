@@ -75,14 +75,22 @@ osakaToinPlayer.setUpPlayer
 osakaToinPlayer.run
 
 
+#size: lengthと同じ。文字列中の文字の数を返す
+
+#times: 一定の回数だけ同じ処理をさせるメソッド。
+#参考URL: http://d.hatena.ne.jp/sandai/20090203/p1
+
 #ゲッター、名前　年齢を個別に表示できる
 #セッター、名前、年齢を変更できる
 #ゲッターがないとセッターが表示されたない
+#セッター
+# def name=(value)
+# name=と(value)にスペースがエラーがおきる
 #アクセスメソッドでゲッターセッターを簡単に定義できる
 # attr_accessor :name, :age
 
 #ハッシュ
-#個別の呼び出しかたは puts[:hoge]
+#個別の呼び出しかたは puts hoge[:hoge]
 #要素すべての呼び出しかたは each { |key, value| puts "#{key} #{value}"}
 
 #配列
@@ -90,7 +98,17 @@ osakaToinPlayer.run
 #ハッシュ
 #hoge = { fuga: 'fuga', zuga: 'zuga'}
 
+#getsメソッド キーボードからの入力を待つ。改行まで読み込むと、getsメソッドが終了して次の処理へ進みます。
+#chompメソッド 入力に含まれている改行文字を取り除く
 
+
+#細かな点
+# def initialize(name, age)
+# 		#濁点があると、putsで配列が表示されてしまう
+# 		@name = name,
+# 		@age = age
+# 	end
+# [hoge, fuga], hoge
 
 
 # class Student
