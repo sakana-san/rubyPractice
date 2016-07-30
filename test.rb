@@ -48,19 +48,78 @@ class OsakaToinPlayer
 		}
 		puts "\n---------------"
 	end
+	def searchPlayer
+		osakaToin = OsakaToin.new("", "", "", "")
+		print "\n"
+		print "名前:"
+		osakaToin.name = gets.chomp
+		print "年齢:"
+		osakaToin.age = gets.chomp
+		print "ポジション:"
+		osakaToin.position = gets.chomp
+		print "背番号:"
+		osakaToin.number = gets.chomp
+
+		search = osakaToin
+		foundPlayer = {}
+
+		@player.each { |key, value|
+			search_flag = 1
+			input_check = 0
+
+			#もし選手名が空ではなくて
+			if search.name != ''
+				#search.nameとvalue.nameがマッチしなかった時、search_flagに0を代入
+				#逆に言うと、1文字でもマッチしたらsearch_flagに1を代入
+				search_flag = 0 if search.name =~ /[^"#{value.name}"]/
+			else
+				#そうじゃなければinput_checkに1を追加する
+				input_check += 1
+			end
+			if search.age != ''
+				search_flag = 0 if search.age != value.age
+			else 
+				input_check += 1
+			end
+			if search.position != ''
+				#search.positionとvalue.positionが1文字でも違えばsearch_flagに0を代入する
+				search_flag = 0 if search.position != value.position
+			else
+				input_check += 1
+			end
+			if search.number != ''
+				search_flag = 0 if search.number != value.number
+			else 
+				input_check += 1
+			end
+			foundPlayer[key] = value if search_flag == 1 && input_check < 1
+		}
+		puts "\n---------------"
+		if foundPlayer.size > 0
+			foundPlayer.each { |key, value|
+				print value.toFormattedString()
+			}
+			puts "\n---------------"
+		else
+			print "条件に一致する選手がいてません"
+		end
+	end
 	def run
 		while true
 			print "
 				1. 選手の登録
 				2. 選手の表示
+				3. 選手の検索
 				9. 終了
-				番号を選んでください(1,2,9)："
+				番号を選んでください(1,2,3,9)："
 			num = gets.chomp
 			case
 			when '1' == num
 				addOsakaToinPlayer
 			when '2' == num
 				listAllPlayer
+			when '3' == num
+				searchPlayer
 			when '9' == num
 				break;
 			else
@@ -100,6 +159,13 @@ osakaToinPlayer.run
 
 #getsメソッド キーボードからの入力を待つ。改行まで読み込むと、getsメソッドが終了して次の処理へ進みます。
 #chompメソッド 入力に含まれている改行文字を取り除く
+
+#while ture
+# ループさせる時に使用
+# while true
+# 	ループさせるコード
+# 	break ←処理を抜けるときはbreakを使用
+# end
 
 
 #細かな点
