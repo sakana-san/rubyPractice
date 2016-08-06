@@ -70,10 +70,10 @@ class OsakaToinPlayer
 			#もし選手名が空ではなくて
 			if search.name != ''
 				#search.nameとvalue.nameがマッチしなかった時、search_flagに0を代入
-				#逆に言うと、1文字でもマッチしたらsearch_flagに1を代入
+				#逆に言うと、マッチしたらsearch_flagに1を代入
 				search_flag = 0 if search.name =~ /[^"#{value.name}"]/
 			else
-				#そうじゃなければinput_checkに1を追加する
+				#もし選手名が空だったら1を追加する
 				input_check += 1
 			end
 			if search.age != ''
@@ -149,8 +149,8 @@ osakaToinPlayer.run
 # attr_accessor :name, :age
 
 #ハッシュ
-#個別の呼び出しかたは puts hoge[:hoge]
-#要素すべての呼び出しかたは each { |key, value| puts "#{key} #{value}"}
+#個別の呼び出しかたは puts hoge[:fuga]
+#要素すべての呼び出しかたは hoge.each { |key, value| puts "#{key} #{value}"}
 
 #配列
 #hoge = [fuga, zuga]
@@ -175,6 +175,11 @@ osakaToinPlayer.run
 # 		@age = age
 # 	end
 # [hoge, fuga], hoge
+
+#toFormatStringの中でputsしない。 ハッシュのタイトルが一番下に表示されてしまう
+# def  toFormatString(sep = "\n")
+# 	"#{@title}#{sep}#{@author}#{sep}#{@page}#{sep}#{@publish_date}#{sep}"
+# end
 
 
 # class Student
@@ -301,3 +306,113 @@ osakaToinPlayer.run
 # player = toinGakuenInfo["大阪桐蔭選手紹介2"]
 
 # puts player.name
+
+
+# class Crazy
+# 	def initialize(adventure, cast)
+# 		@adventure = adventure
+# 		@cast = cast
+# 	end
+# 	attr_accessor :adventure, :cast
+# 	def to_s
+# 		"#{@adventure}, #{@cast}"
+# 	end
+# 	def toFormatString(sep = "\n")
+# 		"司会者: #{@cast}#{sep}ジャーニー: #{@adventure}#{sep}"
+# 	end
+# end
+
+# class CrazyData
+# 	def initialize
+# 		@CD = {}
+# 	end
+# 	def setUpData
+# 		@CD[:timeTable1] = Crazy.new('丸山ゴンザレス', '設楽')
+# 		@CD[:timeTable2] = Crazy.new('佐藤', '松本')
+# 		@CD[:timeTable3] = Crazy.new('よしだなぎ', '小池栄子')
+# 	end
+# 	def addData
+# 		crazy = Crazy.new("", "")
+# 		print "キー:"
+# 		print "\n"
+# 		key = gets.chomp
+
+# 		print "司会者:"
+# 		crazy.cast = gets.chomp
+# 		print "ジャーニー:"
+# 		crazy.adventure = gets.chomp
+# 		@CD[key] = crazy
+# 	end
+# 	def listData
+# 		puts "\n---------------"
+# 		@CD.each { |key, value|
+# 			print "#{key}:\n" + value.toFormatString
+# 			puts "\n---------------"
+# 		}
+# 	end
+# 	def searchData
+# 		crazy = Crazy.new("", "")
+# 		print "\n"
+
+# 		print "司会者:"
+# 		crazy.cast = gets.chomp
+# 		print "ジャーニー:"
+# 		crazy.adventure = gets.chomp
+		
+# 		foundData = {}
+# 		@CD.each { |key, value|
+			
+# 			flag = 1
+# 			check = 0
+# 			if crazy.cast != ''
+# 				flag = 0 if crazy.cast =~ /[^#{value.cast}]/
+# 			else
+# 				check += 1
+# 			end
+# 			if crazy.adventure != ''
+# 				flag = 0 if crazy.adventure != value.adventure
+# 			else
+# 				check += 1
+# 			end
+# 			foundData[key] = value if flag == 1 && check < 1
+# 		}
+# 		puts "\n---------------"
+# 		if foundData.size > 0
+# 			foundData.each { |key, value|
+# 				print value.toFormatString
+# 				puts "\n---------------"
+# 			}
+# 		else
+# 			print "条件が一致しないよ"
+# 		end
+# 	end
+# 	def run
+# 		while true
+# 			print "
+# 				1. ジャーニーの登録
+# 				2. ジャーニーの表示
+# 				3. ジャーニーの検索
+# 				9. 終了
+# 				番号を選んでください(1,2,3,9):
+# 			"
+# 			num = gets.chomp
+# 			case 
+# 			when '1' == num
+# 				addData
+# 			when '2' == num
+# 				listData
+# 			when '3' == num
+# 				searchData
+# 			when '9' == num
+# 				break;
+# 			end
+# 		end
+# 	end
+# 	def rander
+# 		setUpData
+# 		run
+# 	end
+# end
+
+# crazyData = CrazyData.new
+# crazyData.rander
