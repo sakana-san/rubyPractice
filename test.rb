@@ -3,18 +3,17 @@ require 'date'
 
 
 class OsakaToin
-	def initialize(name, age, position, number)
+	def initialize(name, position, number)
 		@name = name
-		@age = age
 		@position = position
 		@number = number
 	end
-	attr_accessor :name, :age, :position, :number
+	attr_accessor :name, :position, :number
 	def to_s
-		"#{@name}, #{@age}, #{@position}, #{@number}, "
+		"#{@name}, #{@position}, #{@number}"
 	end
 	def toFormattedString(sep = "\n")
-		"名前: #{@name}#{sep} 年齢: #{@age}#{sep} ポジション: #{@position}#{sep} 背番号: #{@number}#{sep}"
+		"名前: #{@name}#{sep} ポジション: #{@position}#{sep} 背番号: #{@number}#{sep}"
 	end
 end
 
@@ -23,18 +22,16 @@ class OsakaToinPlayer
 		@player = {}
 	end
 	def setUpPlayer
-		@player['大阪桐蔭投手: 選手紹介'] = OsakaToin.new("根尾昴", "15歳", "投手", "18番")
-		@player["大阪桐蔭内野手: 選手紹介"] = OsakaToin.new("永広", "18歳", "二塁手", "5番")
+		@player['大阪桐蔭投手: 選手紹介'] = OsakaToin.new("根尾昴", "投手", 18)
+		@player["大阪桐蔭内野手: 選手紹介"] = OsakaToin.new("永広", "二塁手", 5)
 	end
 	def addOsakaToinPlayer
-		osakaToin = OsakaToin.new("", "", "", "")
+		osakaToin = OsakaToin.new("", "", "")
 		print "\n"
 		print "キー"
 		key = gets.chomp
 		print "名前:"
 		osakaToin.name = gets.chomp
-		print "年齢:"
-		osakaToin.age = gets.chomp
 		print "ポジション:"
 		osakaToin.position = gets.chomp
 		print "背番号:"
@@ -49,16 +46,14 @@ class OsakaToinPlayer
 		puts "\n---------------"
 	end
 	def searchPlayer
-		osakaToin = OsakaToin.new("", "", "", "")
+		osakaToin = OsakaToin.new("", "", "")
 		print "\n"
 		print "名前:"
 		osakaToin.name = gets.chomp
-		print "年齢:"
-		osakaToin.age = gets.chomp
 		print "ポジション:"
 		osakaToin.position = gets.chomp
 		print "背番号:"
-		osakaToin.number = gets.chomp
+		osakaToin.number = gets.chomp.to_i
 
 		search = osakaToin
 		foundPlayer = {}
@@ -74,11 +69,6 @@ class OsakaToinPlayer
 				search_flag = 0 if search.name =~ /[^"#{value.name}"]/
 			else
 				#もし選手名が空だったら1を追加する
-				input_check += 1
-			end
-			if search.age != ''
-				search_flag = 0 if search.age != value.age
-			else 
 				input_check += 1
 			end
 			if search.position != ''
