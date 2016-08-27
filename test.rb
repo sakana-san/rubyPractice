@@ -63,23 +63,16 @@ class OsakaToinPlayer
 			input_check = 0
 
 			#もし選手名が空ではなくて
-			if search.name != ''
+			if search!= ''
 				#search.nameとvalue.nameがマッチしなかった時、search_flagに0を代入
 				#逆に言うと、マッチしたらsearch_flagに1を代入
 				search_flag = 0 if search.name =~ /[^"#{value.name}"]/
-			else
-				#もし選手名が空だったら1を追加する
-				input_check += 1
-			end
-			if search.position != ''
+
 				#search.positionとvalue.positionが1文字でも違えばsearch_flagに0を代入する
 				search_flag = 0 if search.position != value.position
-			else
-				input_check += 1
-			end
-			if search.number != ''
 				search_flag = 0 if search.number != value.number
-			else 
+			else
+				#もし選手名が空だったら1を追加する
 				input_check += 1
 			end
 			foundPlayer[key] = value if search_flag == 1 && input_check < 1
@@ -294,115 +287,110 @@ osakaToinPlayer.run
 # }
 
 # player = toinGakuenInfo["大阪桐蔭選手紹介2"]
-
 # puts player.name
 
 
-# class Crazy
-# 	def initialize(adventure, cast)
-# 		@adventure = adventure
+# class BreakingBad
+# 	def initialize(title, cast)
+# 		@title = title
 # 		@cast = cast
 # 	end
-# 	attr_accessor :adventure, :cast
 # 	def to_s
-# 		"#{@adventure}, #{@cast}"
+# 		"#{@title}, #{@cast}"
 # 	end
+# 	attr_accessor :title, :cast
 # 	def toFormatString(sep = "\n")
-# 		"司会者: #{@cast}#{sep}ジャーニー: #{@adventure}#{sep}"
+# 		"番組名: #{@title}#{sep} キャスト: #{@cast}#{sep}"
 # 	end
 # end
 
-# class CrazyData
+# class BreakingInfo
 # 	def initialize
-# 		@CD = {}
+# 		@info = {}
 # 	end
-# 	def setUpData
-# 		@CD[:timeTable1] = Crazy.new('丸山ゴンザレス', '設楽')
-# 		@CD[:timeTable2] = Crazy.new('佐藤', '松本')
-# 		@CD[:timeTable3] = Crazy.new('よしだなぎ', '小池栄子')
+# 	def setUP
+# 		@info = {
+# 			infoVer1: BreakingBad.new('ブレイキングバッド', 'ウオルターホワイト'),
+# 			infoVer2: BreakingBad.new('ブレイキングバッド', 'ジェシーピンクマン')
+# 		}
 # 	end
-# 	def addData
-# 		crazy = Crazy.new("", "")
-# 		print "キー:"
+# 	def add
+# 		breakingBad = BreakingBad.new("", "")
 # 		print "\n"
+# 		print "キー:"
 # 		key = gets.chomp
 
-# 		print "司会者:"
-# 		crazy.cast = gets.chomp
-# 		print "ジャーニー:"
-# 		crazy.adventure = gets.chomp
-# 		@CD[key] = crazy
+# 		print "番組名:"
+# 		breakingBad.title = gets.chomp
+
+# 		print "キャスト:"
+# 		breakingBad.cast = gets.chomp
+# 		@info[key] = breakingBad
 # 	end
-# 	def listData
-# 		puts "\n---------------"
-# 		@CD.each { |key, value|
-# 			print "#{key}:\n" + value.toFormatString
-# 			puts "\n---------------"
+# 	def list
+# 		@info.each { |key, value|
+# 			print value.toFormatString
 # 		}
 # 	end
-# 	def searchData
-# 		crazy = Crazy.new("", "")
+# 	def search
+# 		breakingBad = BreakingBad.new("", "")
 # 		print "\n"
+# 		print "番組名:"
+# 		breakingBad.title = gets.chomp
 
-# 		print "司会者:"
-# 		crazy.cast = gets.chomp
-# 		print "ジャーニー:"
-# 		crazy.adventure = gets.chomp
-		
-# 		foundData = {}
-# 		@CD.each { |key, value|
-			
+# 		print "キャスト:"
+# 		breakingBad.cast = gets.chomp
+
+# 		foundBreaking = {}
+
+# 		@info.each { |key, value|
 # 			flag = 1
 # 			check = 0
-# 			if crazy.cast != ''
-# 				flag = 0 if crazy.cast =~ /[^#{value.cast}]/
+
+# 			if breakingBad != ''
+# 				flag = 0 if breakingBad.title =~ /[^"#{value.title}"]/
+# 				flag = 0 if breakingBad.cast != value.cast
 # 			else
 # 				check += 1
 # 			end
-# 			if crazy.adventure != ''
-# 				flag = 0 if crazy.adventure != value.adventure
-# 			else
-# 				check += 1
-# 			end
-# 			foundData[key] = value if flag == 1 && check < 1
+			
+# 			foundBreaking[key] = value if flag == 1 && check < 1
 # 		}
-# 		puts "\n---------------"
-# 		if foundData.size > 0
-# 			foundData.each { |key, value|
+# 		puts "\n--------------------------"
+# 		if foundBreaking.size > 0
+# 			foundBreaking.each { |key, value|
 # 				print value.toFormatString
-# 				puts "\n---------------"
 # 			}
+# 			puts "\n--------------------------"
 # 		else
-# 			print "条件が一致しないよ"
+# 			print "条件に一致する情報がありません"
 # 		end
 # 	end
 # 	def run
 # 		while true
 # 			print "
-# 				1. ジャーニーの登録
-# 				2. ジャーニーの表示
-# 				3. ジャーニーの検索
-# 				9. 終了
-# 				番号を選んでください(1,2,3,9):
+# 				1.データの登録
+# 				2.データの表示
+# 				3.データの検索
+# 				9.データの終了
 # 			"
 # 			num = gets.chomp
 # 			case 
 # 			when '1' == num
-# 				addData
+# 				add
 # 			when '2' == num
-# 				listData
+# 				list
+# 				add
 # 			when '3' == num
-# 				searchData
+# 				search
 # 			when '9' == num
 # 				break;
+# 			else
 # 			end
 # 		end
 # 	end
-# 	def rander
-# 		setUpData
-# 		run
-# 	end
 # end
 
-# crazyData = CrazyData.new
-# crazyData.rander
+# breakingInfo = BreakingInfo.new
+# breakingInfo.setUP
+breakingInfo.run
