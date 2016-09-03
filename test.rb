@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'date'
 
-
 class OsakaToin
 	def initialize(name, position, number)
 		@name = name
@@ -9,6 +8,10 @@ class OsakaToin
 		@number = number
 	end
 	attr_accessor :name, :position, :number
+
+	def to_csv(key, sep = "\n")
+		"#{key}, #{@name}, #{@position}, #{@number}#{sep}"
+	end
 	def to_s
 		"#{@name}, #{@position}, #{@number}"
 	end
@@ -18,12 +21,21 @@ class OsakaToin
 end
 
 class OsakaToinPlayer
-	def initialize
+	def initialize(filename)
+		@csv = filename
 		@player = {}
 	end
 	def setUpPlayer
-		@player['大阪桐蔭投手: 選手紹介'] = OsakaToin.new("根尾昴", "投手", 18)
-		@player["大阪桐蔭内野手: 選手紹介"] = OsakaToin.new("永広", "二塁手", 5)
+		open(@csv, "r:UTF-8") {|file|
+			file.each {|value|
+				key, name, position, number = value.chomp.split(',')
+				# 蔵書データ1件分のインスタンスを作成してハッシュに登録する
+				@player[key] = 
+				OsakaToin.new(name, position, number.to_i)
+			}
+		}
+		# @player['大阪桐蔭投手: 選手紹介'] = OsakaToin.new("根尾昴", "投手", 18)
+		# @player["大阪桐蔭内野手: 選手紹介"] = OsakaToin.new("永広", "二塁手", 5)
 	end
 	def addOsakaToinPlayer
 		osakaToin = OsakaToin.new("", "", "")
@@ -87,14 +99,23 @@ class OsakaToinPlayer
 			print "条件に一致する選手がいてません"
 		end
 	end
+	def saveAllPlayer
+		open(@csv, "w:UTF-8") {|file|
+			@player.each { |key, value|
+				file.print( value.to_csv(key))
+			}
+			puts "\nファイルへ保存しました"
+		}
+	end
 	def run
 		while true
 			print "
 				1. 選手の登録
 				2. 選手の表示
 				3. 選手の検索
+				8. CSVへ保存
 				9. 終了
-				番号を選んでください(1,2,3,9)："
+				番号を選んでください(1,2,3,8,9)："
 			num = gets.chomp
 			case
 			when '1' == num
@@ -103,6 +124,8 @@ class OsakaToinPlayer
 				listAllPlayer
 			when '3' == num
 				searchPlayer
+			when '8' == num
+				saveAllPlayer
 			when '9' == num
 				break;
 			else
@@ -111,7 +134,7 @@ class OsakaToinPlayer
 	end
 end
 
-osakaToinPlayer = OsakaToinPlayer.new
+osakaToinPlayer = OsakaToinPlayer.new('player.csv')
 
 osakaToinPlayer.setUpPlayer
 osakaToinPlayer.run
@@ -393,4 +416,4 @@ osakaToinPlayer.run
 
 # breakingInfo = BreakingInfo.new
 # breakingInfo.setUP
-breakingInfo.run
+ # breakingInfo.run
