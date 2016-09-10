@@ -187,6 +187,35 @@ osakaToinPlayer.run
 # 	"#{@title}#{sep}#{@author}#{sep}#{@page}#{sep}#{@publish_date}#{sep}"
 # end
 
+#クラス内でputsしてたら、一番下のプロパティでputsしない
+#したら中身全部呼ばれる
+#悪い例:
+#class Member
+#	def print
+#		@cast.each{ |key, value|
+#			puts "#{key}: #{value}.toFormatString"
+#		}
+#	end
+#end
+#member = Member.new
+#puts member.list
+
+
+#変数にkeyがないとエラーになる
+# def setUpPlayer
+# open(@csv, "r:UTF-8") {|file|
+# 	file.each {|value|
+# 		key, name, position, number = value.chomp.split(',')
+# 		# 蔵書データ1件分のインスタンスを作成してハッシュに登録する
+# 		@player[key] = 
+# 		OsakaToin.new(name, position, number.to_i)
+# 	}
+# }
+# # @player['大阪桐蔭投手: 選手紹介'] = OsakaToin.new("根尾昴", "投手", 18)
+# # @player["大阪桐蔭内野手: 選手紹介"] = OsakaToin.new("永広", "二塁手", 5)
+# end
+
+
 
 # class Student
 # 	def initialize(name, age)
