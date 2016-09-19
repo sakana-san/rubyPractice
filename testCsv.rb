@@ -1,3 +1,6 @@
+#あらかじめファイルを用意する
+#ファイルの中身は何も書かれてないほうがいいかも
+
 # -*- coding: utf-8 -*-
 require 'date'
 
@@ -15,7 +18,7 @@ class OsakaToin
 	def to_s
 		"#{@name}, #{@position}, #{@number}"
 	end
-	def toFormattedString(sep = "\n")
+	def toFormatString(sep = "\n")
 		"名前: #{@name}#{sep} ポジション: #{@position}#{sep} 背番号: #{@number}#{sep}"
 	end
 end
@@ -26,8 +29,8 @@ class OsakaToinPlayer
 		@player = {}
 	end
 	def setUpPlayer
-		open(@csv, "r:UTF-8") {|file|
-			file.each {|value|
+		open(@csv, "r:UTF-8") { |file|
+			file.each { |value|
 				key, name, position, number = value.chomp.split(',')
 				# 蔵書データ1件分のインスタンスを作成してハッシュに登録する
 				@player[key] = 
@@ -53,7 +56,7 @@ class OsakaToinPlayer
 	def listAllPlayer
 		puts "\n---------------"
 		@player.each { |key, value|
-			print value.toFormattedString()
+			print value.toFormatString()
 		}
 		puts "\n---------------"
 	end
@@ -92,7 +95,7 @@ class OsakaToinPlayer
 		puts "\n---------------"
 		if foundPlayer.size > 0
 			foundPlayer.each { |key, value|
-				print value.toFormattedString()
+				print value.toFormatString()
 			}
 			puts "\n---------------"
 		else
