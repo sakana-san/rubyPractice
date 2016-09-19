@@ -9,14 +9,10 @@ class OsakaToin
 		@number = number
 	end
 	attr_accessor :name, :position, :number
-
-	def to_csv(key, sep = "\n")
-		"#{key}, #{@name}, #{@position}, #{@number}#{sep}"
-	end
 	def to_s
 		"#{@name}, #{@position}, #{@number}"
 	end
-	def toFormattedString(sep = "\n")
+	def toFormatString(sep = "\n")
 		"名前: #{@name}#{sep} ポジション: #{@position}#{sep} 背番号: #{@number}#{sep}"
 	end
 end
@@ -36,6 +32,7 @@ class OsakaToinPlayer
 		osakaToin.position = gets.chomp
 		print "背番号:"
 		osakaToin.number = gets.chomp
+		# 作成したデータを1件分をPStoreデータベースに登録する
 		@db.transaction do
 			@db[key] = osakaToin
 		end
@@ -44,7 +41,7 @@ class OsakaToinPlayer
 		puts "\n---------------"
 		@db.transaction( true) do
 			@db.roots.each{ |key|
-				puts "\nキー"
+				puts "キー: #{key}"
 				print @db[key].toFormatString
 				puts "\n---------------"
 			}
@@ -53,7 +50,7 @@ class OsakaToinPlayer
 	def deletePlayer
 		print "\n"
 		print "キーを指定してください"
-		key = get.chomp
+		key = gets.chomp
 
 		@db.transaction do
 			if @db.root?(key)
@@ -123,7 +120,7 @@ class OsakaToinPlayer
 				1. 選手の登録
 				2. 選手の表示
 				3. 選手の検索
-				8. CSVへ保存
+				8. テキスト削除
 				9. 終了
 				番号を選んでください(1,2,3,8,9)："
 			num = gets.chomp
@@ -135,7 +132,7 @@ class OsakaToinPlayer
 			when '3' == num
 				searchPlayer
 			when '8' == num
-				saveAllPlayer
+				deletePlayer
 			when '9' == num
 				break;
 			else
