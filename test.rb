@@ -71,7 +71,7 @@ class MangaList
 				flag = 0 if manga.name =~ /[^"#{value.name}"]/
 				flag = 0 if manga.num != value.num
 			else
-				check += 1;
+				check += 1
 			end
 			# 比較が一致したらvalueを入力、未入力の場合は格納しない
 			@foundManga[key] = value if flag == 1 && check < 1

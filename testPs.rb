@@ -26,12 +26,14 @@ class OsakaToinPlayer
 		print "\n"
 		print "キー"
 		key = gets.chomp
+
 		print "名前:"
 		osakaToin.name = gets.chomp
 		print "ポジション:"
 		osakaToin.position = gets.chomp
 		print "背番号:"
-		osakaToin.number = gets.chomp
+		osakaToin.number = gets.chomp.to_i
+
 		# 作成したデータを1件分をPStoreデータベースに登録する
 		@db.transaction do
 			@db[key] = osakaToin
@@ -39,34 +41,23 @@ class OsakaToinPlayer
 	end
 	def listAllPlayer
 		puts "\n---------------"
-		@db.transaction( true) do
+		@db.transaction(true) do #読み込みモード
+			# rootsがキーの配列を返し、eachで1件ずつ処理する
 			@db.roots.each{ |key|
+				#得られたキーを使ってPstoreからデータを取得
 				puts "キー: #{key}"
+				#それを出力
 				print @db[key].toFormatString
 				puts "\n---------------"
 			}
 		end
 	end
-	def deletePlayer
-		print "\n"
-		print "キーを指定してください"
-		key = gets.chomp
-
-		@db.transaction do
-			if @db.root?(key)
-				print @db[key].toFormatString
-				print "\n削除しますか？(Y/yなら削除を実行します):"
-				yesno = gets.chomp.upcase
-				if /^Y$/ =~ yesno
-					@db.delete(key)
-					puts "\nデーターベースからさくじょしました"
-				end
-			end
-		end
-	end
 	# def searchPlayer
 	# 	osakaToin = OsakaToin.new("", "", "")
 	# 	print "\n"
+	# 	print "キー:"
+	# 	key = gets.chomp
+
 	# 	print "名前:"
 	# 	osakaToin.name = gets.chomp
 	# 	print "ポジション:"
@@ -74,46 +65,54 @@ class OsakaToinPlayer
 	# 	print "背番号:"
 	# 	osakaToin.number = gets.chomp.to_i
 
-	# 	search = osakaToin
-	# 	foundPlayer = {}
+	# 	@foundPlayer = {}
 
 	# 	@player.each { |key, value|
-	# 		search_flag = 1
-	# 		input_check = 0
+	# 		flag = 1
+	# 		check = 0
 
 	# 		#もし選手名が空ではなくて
-	# 		if search!= ''
-	# 			#search.nameとvalue.nameがマッチしなかった時、search_flagに0を代入
-	# 			#逆に言うと、マッチしたらsearch_flagに1を代入
-	# 			search_flag = 0 if search.name =~ /[^"#{value.name}"]/
-
-	# 			#search.positionとvalue.positionが1文字でも違えばsearch_flagに0を代入する
-	# 			search_flag = 0 if search.position != value.position
-	# 			search_flag = 0 if search.number != value.number
+	# 		if @player != ''
+	# 			#search.nameとvalue.nameがマッチしなかった時、flagに0を代入
+	# 			#逆に言うと、マッチしたらflagに1を代入
+	# 			flag = 0 if osakaToin.name =~ /[^"#{value.name}"]/
+	# 			#osakaToin.positionとvalue.positionが1文字でも違えばosakaToin_flagに0を代入する
+	# 			flag = 0 if osakaToin.position != value.position
+	# 			flag = 0 if osakaToin.number != value.number
 	# 		else
 	# 			#もし選手名が空だったら1を追加する
-	# 			input_check += 1
+	# 			check += 1
 	# 		end
-	# 		foundPlayer[key] = value if search_flag == 1 && input_check < 1
+	# 		@foundPlayer[key] = value if flag == 1 && check < 1
 	# 	}
 	# 	puts "\n---------------"
-	# 	if foundPlayer.size > 0
-	# 		foundPlayer.each { |key, value|
-	# 			print value.toFormattedString()
+	# 	if @foundPlayer.size > 0
+	# 		@foundPlayer.each { |key, value|
+	# 			print value.toFormatString
 	# 		}
 	# 		puts "\n---------------"
 	# 	else
 	# 		print "条件に一致する選手がいてません"
 	# 	end
 	# end
-	# def saveAllPlayer
-	# 	open(@csv, "w:UTF-8") {|file|
-	# 		@player.each { |key, value|
-	# 			file.print( value.to_csv(key))
-	# 		}
-	# 		puts "\nファイルへ保存しました"
-	# 	}
-	# end
+	def deletePlayer
+		print "\n"
+		print "キーを指定してください"
+		key = gets.chomp
+
+		# 削除対象データを確認してから削除する
+		@db.transaction do
+			if @db.root?(key)
+				print @db[key].toFormatString
+				print "\n削除しますか？(Y/yなら削除を実行します):"
+				yesno = gets.chomp.upcase
+				if /^Y$/ =~ yesno
+					@db.delete(key)
+					puts "\nデーターベースから削除しました"
+				end
+			end
+		end
+	end
 	def run
 		while true
 			print "
