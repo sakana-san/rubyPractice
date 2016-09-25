@@ -2,136 +2,130 @@
 require 'date'
 require 'pstore'
 
-class OsakaToin
-	def initialize(name, position, number)
+
+class Hanabi
+	def initialize(name, desc)
 		@name = name
-		@position = position
-		@number = number
+		@desc = desc
 	end
-	attr_accessor :name, :position, :number
+	attr_accessor :name, :desc
 	def to_s
-		"#{@name}, #{@position}, #{@number}"
+		"#{@name}, #{@desc}"
 	end
-	def toFormatString(sep = "\n")
-		"名前: #{@name}#{sep} ポジション: #{@position}#{sep} 背番号: #{@number}#{sep}"
+	def toFormatString(sep="\n")
+		"名前:#{@name}#{sep}役柄:#{@desc}#{sep}"
 	end
 end
 
-class OsakaToinPlayer
+class HanabiCasting
 	def initialize(pstore)
 		@db = PStore.new(pstore)
 	end
-	def addOsakaToinPlayer
-		osakaToin = OsakaToin.new("", "", "")
+	# def set
+	# 	@cast = {
+	# 		member1: Hanabi.new('のりみち', '主人公、なづなが好き'),
+	# 		member2: Hanabi.new('なづな', 'のりみちを密かに想う少女、複雑な家庭の中で育つ'),
+	# 		member3: Hanabi.new('ゆうすけ', 'のりみちの友達、なづなが好きでのりみちをライバル視している'),
+	# 		member4: Hanabi.new('純一', 'のりみちの友達、和弘と花火が丸いか平べったいかで揉める。平べったい派。三浦先生が好き。'),
+	# 		member5: Hanabi.new('和弘', 'のりみちの友達、純一と花火が丸いか平べったいかで揉める。丸い派。灯台で花火を見る計画をたてた'),
+	# 		member6: Hanabi.new('稔', 'のりみちの友達、一番小さいが、大人ぶって花火に行くなんてダサいと発言して、純一たちにからかわれる')
+	# 	}
+	# end
+	def add 
+		hanabi = Hanabi.new('', '')
 		print "\n"
-		print "キー"
+		print 'キー:'
 		key = gets.chomp
 
-		print "名前:"
-		osakaToin.name = gets.chomp
-		print "ポジション:"
-		osakaToin.position = gets.chomp
-		print "背番号:"
-		osakaToin.number = gets.chomp.to_i
+		print '名前:'
+		hanabi.name = gets.chomp
+		print '役柄:'
+		hanabi.desc = gets.chomp
 
-		# 作成したデータを1件分をPStoreデータベースに登録する
-		@db.transaction do
-			@db[key] = osakaToin
+		flag = 0
+		flag = 1 if hanabi.name != '' || hanabi.desc != ''
+		if flag == 1
+			# 作成したデータを1件分をPStoreデータベースに登録する
+			@db.transaction do
+				@db[key] = hanabi
+			end
+		else
+			print '入力してください'
 		end
 	end
-	def listAllPlayer
-		puts "\n---------------"
+	def prints
+		puts "\n-----------------------------"
 		@db.transaction(true) do #読み込みモード
 			# rootsがキーの配列を返し、eachで1件ずつ処理する
-			@db.roots.each{ |key|
+			@db.roots.each { |key|
 				#得られたキーを使ってPstoreからデータを取得
 				puts "キー: #{key}"
-				#それを出力
 				print @db[key].toFormatString
-				puts "\n---------------"
+				puts "\n-----------------------------"
 			}
 		end
 	end
-	# def searchPlayer
-	# 	osakaToin = OsakaToin.new("", "", "")
-	# 	print "\n"
-	# 	print "キー:"
-	# 	key = gets.chomp
-
-	# 	print "名前:"
-	# 	osakaToin.name = gets.chomp
-	# 	print "ポジション:"
-	# 	osakaToin.position = gets.chomp
-	# 	print "背番号:"
-	# 	osakaToin.number = gets.chomp.to_i
-
-	# 	@foundPlayer = {}
-
-	# 	@player.each { |key, value|
-	# 		flag = 1
-	# 		check = 0
-
-	# 		#もし選手名が空ではなくて
-	# 		if @player != ''
-	# 			#search.nameとvalue.nameがマッチしなかった時、flagに0を代入
-	# 			#逆に言うと、マッチしたらflagに1を代入
-	# 			flag = 0 if osakaToin.name =~ /[^"#{value.name}"]/
-	# 			#osakaToin.positionとvalue.positionが1文字でも違えばosakaToin_flagに0を代入する
-	# 			flag = 0 if osakaToin.position != value.position
-	# 			flag = 0 if osakaToin.number != value.number
-	# 		else
-	# 			#もし選手名が空だったら1を追加する
-	# 			check += 1
-	# 		end
-	# 		@foundPlayer[key] = value if flag == 1 && check < 1
-	# 	}
-	# 	puts "\n---------------"
-	# 	if @foundPlayer.size > 0
-	# 		@foundPlayer.each { |key, value|
-	# 			print value.toFormatString
-	# 		}
-	# 		puts "\n---------------"
-	# 	else
-	# 		print "条件に一致する選手がいてません"
-	# 	end
-	# end
-	def deletePlayer
+	def search
+		hanabi = Hanabi.new('', '')
 		print "\n"
-		print "キーを指定してください"
+		print 'キー:'
 		key = gets.chomp
 
-		# 削除対象データを確認してから削除する
-		@db.transaction do
-			if @db.root?(key)
-				print @db[key].toFormatString
-				print "\n削除しますか？(Y/yなら削除を実行します):"
-				yesno = gets.chomp.upcase
-				if /^Y$/ =~ yesno
-					@db.delete(key)
-					puts "\nデーターベースから削除しました"
+		# 空白入力でなければ
+		if key != ''
+			@db.transaction do
+				#Pstoreからのデータがあれば出力、なければエラー文言を返す
+				searchAnswer = (@db.root?(key)) ? @db[key].toFormatString : '指定された条件がありません'
+				print searchAnswer
+			end
+		else
+			print '入力してください'
+		end 
+	end
+	def deleteCast
+		hanabi = Hanabi.new('', '')
+		print "\n"
+		print 'キー:'
+		key = gets.chomp
+
+		# 空白入力でなければ
+		if key != ''
+			@db.transaction do
+				if @db.root?(key)
+					print @db[key].toFormatString
+					print "\n削除しますか?(Y/yなら削除を実行します):"
+					answer = gets.chomp.upcase
+					if /^Y$/ =~ answer
+						@db.delete(key)
+						puts "\nデータベースから削除しました"
+					end
+				else
+					print '指定された条件がありません'
 				end
 			end
-		end
+		else
+			print '入力してください'
+		end 
 	end
-	def run
+	def run 
 		while true
-			print "
-				1. 選手の登録
-				2. 選手の表示
-				3. 選手の検索
-				8. テキスト削除
+			print '
+				1. データ登録
+				2. データの表示
+				3. データの検索
+				8. データの削除
 				9. 終了
-				番号を選んでください(1,2,3,8,9)："
+			'
 			num = gets.chomp
 			case
 			when '1' == num
-				addOsakaToinPlayer
+				add
 			when '2' == num
-				listAllPlayer
+				prints
 			when '3' == num
-				searchPlayer
+				search
 			when '8' == num
-				deletePlayer
+				deleteCast
 			when '9' == num
 				break;
 			else
@@ -140,315 +134,6 @@ class OsakaToinPlayer
 	end
 end
 
-osakaToinPlayer = OsakaToinPlayer.new('player.db')
+hanabiCasting = HanabiCasting.new('cast.db')
 
-# osakaToinPlayer.setUpPlayer
-osakaToinPlayer.run
-
-
-#size: lengthと同じ。文字列中の文字の数を返す
-
-#times: 一定の回数だけ同じ処理をさせるメソッド。
-#参考URL: http://d.hatena.ne.jp/sandai/20090203/p1
-
-#ゲッター、名前　年齢を個別に表示できる
-#セッター、名前、年齢を変更できる
-#ゲッターがないとセッターが表示されたない
-#セッター
-# def name=(value)
-# name=と(value)にスペースがエラーがおきる
-#アクセスメソッドでゲッターセッターを簡単に定義できる
-# attr_accessor :name, :age
-
-#ハッシュ
-#個別の呼び出しかたは puts hoge[:fuga]
-#要素すべての呼び出しかたは hoge.each { |key, value| puts "#{key} #{value}"}
-
-#配列
-#hoge = [fuga, zuga]
-#ハッシュ
-#hoge = { fuga: 'fuga', zuga: 'zuga'}
-
-#getsメソッド キーボードからの入力を待つ。改行まで読み込むと、getsメソッドが終了して次の処理へ進みます。
-#chompメソッド 入力に含まれている改行文字を取り除く
-
-#while ture
-# ループさせる時に使用
-# while true
-# 	ループさせるコード
-# 	break ←処理を抜けるときはbreakを使用
-# end
-
-
-#細かな点
-# def initialize(name, age)
-# 		#濁点があると、putsで配列が表示されてしまう
-# 		@name = name,
-# 		@age = age
-# 	end
-# [hoge, fuga], hoge
-
-#toFormatStringの中でputsしない。 ハッシュのタイトルが一番下に表示されてしまう
-# def  toFormatString(sep = "\n")
-# 	"#{@title}#{sep}#{@author}#{sep}#{@page}#{sep}#{@publish_date}#{sep}"
-# end
-
-#クラス内でputsしてたら、一番下のプロパティでputsしない
-#したら中身全部呼ばれる
-#悪い例:
-#class Member
-#	def print
-#		@cast.each{ |key, value|
-#			puts "#{key}: #{value}.toFormatString"
-#		}
-#	end
-#end
-#member = Member.new
-#puts member.list
-
-
-#変数にkeyがないとエラーになる
-# def setUpPlayer
-# open(@csv, "r:UTF-8") {|file|
-# 	file.each {|value|
-# 		key, name, position, number = value.chomp.split(',')
-# 		# 蔵書データ1件分のインスタンスを作成してハッシュに登録する
-# 		@player[key] = 
-# 		OsakaToin.new(name, position, number.to_i)
-# 	}
-# }
-# # @player['大阪桐蔭投手: 選手紹介'] = OsakaToin.new("根尾昴", "投手", 18)
-# # @player["大阪桐蔭内野手: 選手紹介"] = OsakaToin.new("永広", "二塁手", 5)
-# end
-
-
-
-# class Student
-# 	def initialize(name, age)
-# 		@name = name
-# 		@age = age
-# 	end
-# 	def to_s
-# 		"#{@name},#{@value}"
-# 	end
-# end
-
-
-# class StudentBook
-# 	def initialize
-# 		@student = {}
-# 	end
-
-# 	def setUpStudent
-# 		@student = {
-# 			yamada: Student.new('山田', 18),
-# 			satou: Student.new('佐藤', 28),
-# 			suzuki: Student.new('鈴木', 33)
-# 		}
-# 	end
-# 	def printStudnet
-# 		@student.each { |key, value|
-# 			puts "#{key}: #{value}"
-# 		}
-# 	end
-
-# 	def listAllStudent
-# 		setUpStudent
-# 		printStudnet
-# 	end
-# end
-
-# studentBook = StudentBook.new
-# studentBook.listAllStudent
-
-
-# class OsakaToin
-# 	def initialize(name, age, position, number)
-# 		@name = name
-# 		@age = age
-# 		@position = position
-# 		@number = number
-# 	end
-# 	def to_s
-# 		"#{@name},#{@age},#{@position},#{@number}"
-# 	end
-# 	def toFormattedString()
-# 		"名前: #{@name}, 年齢: #{@age}, ポジション: #{@position}, 背番号: #{@number}"
-# 	end
-# end
-
-# class OsakaToinPlayer
-# 	def initialize
-# 		@students = {}
-# 	end
-# 	def setUpStudents
-# 		@students = {
-# 			player1: OsakaToin.new('根尾昴', 16, '投手', '18番'),
-# 			player2: OsakaToin.new('吉澤', 18, '三塁手', '5番')
-# 		}
-# 	end
-# 	def printStudents
-# 		@students.each { |key, value|
-# 			puts "#{key}, #{value.toFormattedString}"
-# 		}
-# 	end
-
-# 	def listAllStudents
-# 		setUpStudents
-# 		printStudents
-# 	end
-# end
-
-# osakaToinPlayer = OsakaToinPlayer.new()
-
-# osakaToinPlayer.listAllStudents
-
-
-
-# class ToinGakuenInfo
-# 	def initialize(name, grade, position, number)
-# 		@name = name
-# 		@grade = grade
-# 		@position = position
-# 		@number = number
-# 	end
-# 	attr_accessor :name, :grade, :position, :number
-# 	def to_s
-# 		"#@name, #@grade, #@position, #@number"
-# 	end
-# 	def toFormatString(sep = "\n")
-# 		[
-# 			"選手名: #{@name}",
-# 			"学年: #{@grade}",
-# 			"ポジション: #{@position}",
-# 			"背番号: #{@number}",
-# 		].join(sep)
-# 	end
-# end
-
-# toinGakuenInfo = Hash.new
-# toinGakuenInfo["大阪桐蔭選手紹介"] = ToinGakuenInfo.new(
-#   '根尾 昴',
-#   '一年生',
-#   '投手',
-#   '16'
-#   )
-# toinGakuenInfo["大阪桐蔭選手紹介2"] = ToinGakuenInfo.new( 
-# 	'永谷 弘樹',
-# 	'三年生',
-# 	'二塁手',
-# 	'18'
-# )
-
-# toinGakuenInfo.each { |key, value|
-#   puts "#{key}:\n#{value.toFormatString}"
-# }
-
-# player = toinGakuenInfo["大阪桐蔭選手紹介2"]
-# puts player.name
-
-
-# class BreakingBad
-# 	def initialize(title, cast)
-# 		@title = title
-# 		@cast = cast
-# 	end
-# 	def to_s
-# 		"#{@title}, #{@cast}"
-# 	end
-# 	attr_accessor :title, :cast
-# 	def toFormatString(sep = "\n")
-# 		"番組名: #{@title}#{sep} キャスト: #{@cast}#{sep}"
-# 	end
-# end
-
-# class BreakingInfo
-# 	def initialize
-# 		@info = {}
-# 	end
-# 	def setUP
-# 		@info = {
-# 			infoVer1: BreakingBad.new('ブレイキングバッド', 'ウオルターホワイト'),
-# 			infoVer2: BreakingBad.new('ブレイキングバッド', 'ジェシーピンクマン')
-# 		}
-# 	end
-# 	def add
-# 		breakingBad = BreakingBad.new("", "")
-# 		print "\n"
-# 		print "キー:"
-# 		key = gets.chomp
-
-# 		print "番組名:"
-# 		breakingBad.title = gets.chomp
-
-# 		print "キャスト:"
-# 		breakingBad.cast = gets.chomp
-# 		@info[key] = breakingBad
-# 	end
-# 	def list
-# 		@info.each { |key, value|
-# 			print value.toFormatString
-# 		}
-# 	end
-# 	def search
-# 		breakingBad = BreakingBad.new("", "")
-# 		print "\n"
-# 		print "番組名:"
-# 		breakingBad.title = gets.chomp
-
-# 		print "キャスト:"
-# 		breakingBad.cast = gets.chomp
-
-# 		foundBreaking = {}
-
-# 		@info.each { |key, value|
-# 			flag = 1
-# 			check = 0
-
-# 			if breakingBad != ''
-# 				flag = 0 if breakingBad.title =~ /[^"#{value.title}"]/
-# 				flag = 0 if breakingBad.cast != value.cast
-# 			else
-# 				check += 1
-# 			end
-			
-# 			foundBreaking[key] = value if flag == 1 && check < 1
-# 		}
-# 		puts "\n--------------------------"
-# 		if foundBreaking.size > 0
-# 			foundBreaking.each { |key, value|
-# 				print value.toFormatString
-# 			}
-# 			puts "\n--------------------------"
-# 		else
-# 			print "条件に一致する情報がありません"
-# 		end
-# 	end
-# 	def run
-# 		while true
-# 			print "
-# 				1.データの登録
-# 				2.データの表示
-# 				3.データの検索
-# 				9.データの終了
-# 			"
-# 			num = gets.chomp
-# 			case 
-# 			when '1' == num
-# 				add
-# 			when '2' == num
-# 				list
-# 				add
-# 			when '3' == num
-# 				search
-# 			when '9' == num
-# 				break;
-# 			else
-# 			end
-# 		end
-# 	end
-# end
-
-# breakingInfo = BreakingInfo.new
-# breakingInfo.setUP
- # breakingInfo.run
+hanabiCasting.run
