@@ -1,98 +1,101 @@
 # -*- coding: utf-8 -*-
 require 'date'
 
-class Manga
-	def initialize(name, num)
+
+class Hanabi
+	def initialize(name, desc)
 		@name = name
-		@num = num
+		@desc = desc
 	end
-	attr_accessor :name, :num
+	attr_accessor :name, :desc
 	def to_s
-		"#{@name}, #{@num}"
+		"#{@name}, #{@desc}"
 	end
 	def toFormatString(sep="\n")
-		"タイトル: #{@name}#{sep}巻数: #{@num}#{sep}"
+		"名前:#{@name}#{sep}役柄:#{@desc}#{sep}"
 	end
 end
 
-class MangaList
+class HanabiCasting
 	def initialize
-		@list = {}
+		@cast = {}
 	end
 	def set
-		@list = {
-			ptn1: Manga.new('ジブリ', 1),
-			ptn2: Manga.new('こち亀', 3)
+		@cast = {
+			member1: Hanabi.new('のりみち', '主人公、なづなが好き'),
+			member2: Hanabi.new('なづな', 'のりみちを密かに想う少女、複雑な家庭の中で育つ'),
+			member3: Hanabi.new('ゆうすけ', 'のりみちの友達、なづなが好きでのりみちをライバル視している'),
+			member4: Hanabi.new('純一', 'のりみちの友達、和弘と花火が丸いか平べったいかで揉める。平べったい派。三浦先生が好き。'),
+			member5: Hanabi.new('和弘', 'のりみちの友達、純一と花火が丸いか平べったいかで揉める。丸い派。灯台で花火を見る計画をたてた'),
+			member6: Hanabi.new('稔', 'のりみちの友達、一番小さいが、大人ぶって花火に行くなんてダサいと発言して、純一たちにからかわれる')
 		}
 	end
-	def add
-		manga = Manga.new("", "")
-		print "キー"
+	def add 
+		hanabi = Hanabi.new("", "")
+		print "\n"
+		print "キー:"
 		key = gets.chomp
 
-		print "名前:"
-		manga.name = gets.chomp
+		print '名前:'
+		hanabi.name = gets.chomp
+		print '役柄:'
+		hanabi.desc = gets.chomp
 
-		print "巻数:"
-		manga.num = gets.chomp.to_i
-
-		#み入力の場合はエラーを吐かせる
-		if manga.name != '' && manga.num != ''
-			# 作成したデータ1件分をハッシュに登録する
-			@list[key] = manga
+		flag = 0
+		flag = 1 if hanabi.name != '' || hanabi.desc != ''
+		if flag == 1
+			@cast[key] = hanabi
 		else
-			puts "\n--------------------------"
 			print "入力してください"
-			puts "\n--------------------------"
 		end
 	end
-	def list
-		@list.each { |key, value|
+	def prints
+		puts "\n-----------------------------"
+		@cast.each { |key, value|
 			print value.toFormatString
+			puts "\n-----------------------------"
 		}
 	end
 	def search
-		manga = Manga.new("", "")
-		print "キー"
+		hanabi = Hanabi.new("", "")
+		print "\n"
+		print "キー:"
 		key = gets.chomp
 
-		print "タイトル:"
-		manga.name = gets.chomp
+		print '名前:'
+		hanabi.name = gets.chomp
+		print '役柄:'
+		hanabi.desc = gets.chomp
 
-		print "巻数:"
-		manga.num = gets.chomp.to_i
-		
-		@foundManga = {}
-		# データを1件ずつ取り出して検索と比較する
-		@list.each { |key, value|
-			flag = 1 # 検索条件と一致しているか
-			check = 0 # 検索条件が未入力か
-			if @list != ''
-				flag = 0 if manga.name =~ /[^"#{value.name}"]/
-				flag = 0 if manga.num != value.num
-			else
-				check += 1
-			end
-			# 比較が一致したらvalueを入力、未入力の場合は格納しない
-			@foundManga[key] = value if flag == 1 && check < 1
-		}
-		puts "\n--------------------------"
-		if @foundManga.size > 0
-			#比較が一致したデータを表示
-			@foundManga.each { |key, value|
-				print value.toFormatString
+		@foundCast = {}
+
+		if hanabi != ''
+			flag = 1
+			check = 0
+			@cast.each { |key, value|
+				flag = 0 if hanabi.name =~ /^"#{value.name}"/
+				flag = 0 if hanabi.desc != value.desc
+				@foundCast[key] = value if flag == 1 && check < 1
 			}
-			puts "\n--------------------------"
+			if @foundCast.size > 0
+				puts "\n-----------------------------"
+				@foundCast.each { |key, value|
+					print value.toFormatString
+					puts "\n-----------------------------"
+				}
+			else
+				print "指定された条件がありません"
+			end
 		else
-			print "情報に一致する情報がありません"
+			check += 1
 		end
 	end
-	def run
+	def run 
 		while true
 			print "
-				1. データの登録
+				1. データ登録
 				2. データの表示
-				3. 検索
+				3. データの検索
 				9. 終了
 			"
 			num = gets.chomp
@@ -100,7 +103,7 @@ class MangaList
 			when "1" == num
 				add
 			when "2" == num
-				list
+				prints
 			when "3" == num
 				search
 			when "9" == num
@@ -111,11 +114,10 @@ class MangaList
 	end
 end
 
-mangaList = MangaList.new
+hanabiCasting = HanabiCasting.new
 
-mangaList.set
-mangaList.run
-
+hanabiCasting.set
+hanabiCasting.run
 
 
 #size: lengthと同じ。文字列中の文字の数を返す
@@ -424,4 +426,4 @@ mangaList.run
 
 # breakingInfo = BreakingInfo.new
 # breakingInfo.setUP
- # breakingInfo.run
+# breakingInfo.run
