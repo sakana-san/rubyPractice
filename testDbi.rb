@@ -102,13 +102,11 @@ class HanabiCasting
 		puts "\n修正しました。"
 	end
 	def deleteHanabi
+		hanabi = Hanabi.new("", "")
 		puts "\n8. データの削除"
 		print "キー:"
 		key = gets.chomp
 		print "このレコードを削除ますか？（Y/yなら削除を実行します）："
-
-		hanabi = Hanabi.new("", "")
-		print "\n"
 
 		answer = gets.chomp.upcase
 		if /^Y$/ =~ answer
