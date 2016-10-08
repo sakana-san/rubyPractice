@@ -31,7 +31,7 @@ class HanabiCasting
 	# 		member6: Hanabi.new('稔', 'のりみちの友達、一番小さいが、大人ぶって花火に行くなんてダサいと発言して、純一たちにからかわれる')
 	# 	}
 	# end
-	def add 
+	def add
 		hanabi = Hanabi.new('', '')
 		print "\n"
 		print 'キー:'
@@ -80,7 +80,7 @@ class HanabiCasting
 			end
 		else
 			print '入力してください'
-		end 
+		end
 	end
 	def deleteCast
 		hanabi = Hanabi.new('', '')
@@ -105,9 +105,9 @@ class HanabiCasting
 			end
 		else
 			print '入力してください'
-		end 
+		end
 	end
-	def run 
+	def run
 		while true
 			print '
 				1. データ登録
@@ -118,17 +118,17 @@ class HanabiCasting
 			'
 			num = gets.chomp
 			case
-			when '1' == num
-				add
-			when '2' == num
-				prints
-			when '3' == num
-				search
-			when '8' == num
-				deleteCast
-			when '9' == num
-				break;
-			else
+				when '1' == num
+					add
+				when '2' == num
+					prints
+				when '3' == num
+					search
+				when '8' == num
+					deleteCast
+				when '9' == num
+					break;
+				else
 			end
 		end
 	end
