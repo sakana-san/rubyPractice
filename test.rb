@@ -3,115 +3,115 @@ require 'date'
 
 
 class Hanabi
-	def initialize(name, desc)
-		@name = name
-		@desc = desc
-	end
-	attr_accessor :name, :desc
-	def to_s
-		"#{@name}, #{@desc}"
-	end
-	def toFormatString(sep="\n")
-		"名前:#{@name}#{sep}役柄:#{@desc}#{sep}"
-	end
+  def initialize(name, desc)
+    @name = name
+    @desc = desc
+  end
+  attr_accessor :name, :desc
+  def to_s
+    "#{@name}, #{@desc}"
+  end
+  def toFormatString(sep="\n")
+    "名前:#{@name}#{sep}役柄:#{@desc}#{sep}"
+  end
 end
 
 class HanabiCasting
-	def initialize
-		@cast = {}
-	end
-	def set
-		@cast = {
-			member1: Hanabi.new('のりみち', '主人公、なづなが好き'),
-			member2: Hanabi.new('なづな', 'のりみちを密かに想う少女、複雑な家庭の中で育つ'),
-			member3: Hanabi.new('ゆうすけ', 'のりみちの友達、なづなが好きでのりみちをライバル視している'),
-			member4: Hanabi.new('純一', 'のりみちの友達、和弘と花火が丸いか平べったいかで揉める。平べったい派。三浦先生が好き。'),
-			member5: Hanabi.new('和弘', 'のりみちの友達、純一と花火が丸いか平べったいかで揉める。丸い派。灯台で花火を見る計画をたてた'),
-			member6: Hanabi.new('稔', 'のりみちの友達、一番小さいが、大人ぶって花火に行くなんてダサいと発言して、純一たちにからかわれる')
-		}
-	end
-	def add 
-		hanabi = Hanabi.new("", "")
-		print "\n"
-		print "キー:"
-		key = gets.chomp
+  def initialize
+    @cast = {}
+  end
+  def set
+    @cast = {
+        member1: Hanabi.new('のりみち', '主人公、なづなが好き'),
+        member2: Hanabi.new('なづな', 'のりみちを密かに想う少女、複雑な家庭の中で育つ'),
+        member3: Hanabi.new('ゆうすけ', 'のりみちの友達、なづなが好きでのりみちをライバル視している'),
+        member4: Hanabi.new('純一', 'のりみちの友達、和弘と花火が丸いか平べったいかで揉める。平べったい派。三浦先生が好き。'),
+        member5: Hanabi.new('和弘', 'のりみちの友達、純一と花火が丸いか平べったいかで揉める。丸い派。灯台で花火を見る計画をたてた'),
+        member6: Hanabi.new('稔', 'のりみちの友達、一番小さいが、大人ぶって花火に行くなんてダサいと発言して、純一たちにからかわれる')
+    }
+  end
+  def add
+    hanabi = Hanabi.new("", "")
+    print "\n"
+    print "キー:"
+    key = gets.chomp
 
-		print '名前:'
-		hanabi.name = gets.chomp
-		print '役柄:'
-		hanabi.desc = gets.chomp
+    print '名前:'
+    hanabi.name = gets.chomp
+    print '役柄:'
+    hanabi.desc = gets.chomp
 
-		flag = 0
-		flag = 1 if hanabi.name != '' || hanabi.desc != ''
-		if flag == 1
-			@cast[key] = hanabi
-		else
-			print "入力してください"
-		end
-	end
-	def prints
-		puts "\n-----------------------------"
-		@cast.each { |key, value|
-			print value.toFormatString
-			puts "\n-----------------------------"
-		}
-	end
-	def search
-		hanabi = Hanabi.new("", "")
-		print "\n"
-		print "キー:"
-		key = gets.chomp
+    flag = 0
+    flag = 1 if hanabi.name != '' || hanabi.desc != ''
+    if flag == 1
+      @cast[key] = hanabi
+    else
+      print "入力してください"
+    end
+  end
+  def prints
+    puts "\n-----------------------------"
+    @cast.each { |key, value|
+      print value.toFormatString
+      puts "\n-----------------------------"
+    }
+  end
+  def search
+    hanabi = Hanabi.new("", "")
+    print "\n"
+    print "キー:"
+    key = gets.chomp
 
-		print '名前:'
-		hanabi.name = gets.chomp
-		print '役柄:'
-		hanabi.desc = gets.chomp
+    print '名前:'
+    hanabi.name = gets.chomp
+    print '役柄:'
+    hanabi.desc = gets.chomp
 
-		@foundCast = {}
+    @foundCast = {}
 
-		if hanabi != ''
-			flag = 1
-			check = 0
-			@cast.each { |key, value|
-				flag = 0 if hanabi.name =~ /^"#{value.name}"/
-				flag = 0 if hanabi.desc != value.desc
-				@foundCast[key] = value if flag == 1 && check < 1
-			}
-			if @foundCast.size > 0
-				puts "\n-----------------------------"
-				@foundCast.each { |key, value|
-					print value.toFormatString
-					puts "\n-----------------------------"
-				}
-			else
-				print "指定された条件がありません"
-			end
-		else
-			check += 1
-		end
-	end
-	def run 
-		while true
-			print "
+    if hanabi != ''
+      flag = 1
+      check = 0
+      @cast.each { |key, value|
+        flag = 0 if hanabi.name =~ /^"#{value.name}"/
+        flag = 0 if hanabi.desc != value.desc
+        @foundCast[key] = value if flag == 1 && check < 1
+      }
+      if @foundCast.size > 0
+        puts "\n-----------------------------"
+        @foundCast.each { |key, value|
+          print value.toFormatString
+          puts "\n-----------------------------"
+        }
+      else
+        print "指定された条件がありません"
+      end
+    else
+      check += 1
+    end
+  end
+  def run
+    while true
+      print "
 				1. データ登録
 				2. データの表示
 				3. データの検索
 				9. 終了
 			"
-			num = gets.chomp
-			case
-			when "1" == num
-				add
-			when "2" == num
-				prints
-			when "3" == num
-				search
-			when "9" == num
-				break;
-			else
-			end
-		end
-	end
+      num = gets.chomp
+      case
+        when "1" == num
+          add
+        when "2" == num
+          prints
+        when "3" == num
+          search
+        when "9" == num
+          break;
+        else
+      end
+    end
+  end
 end
 
 hanabiCasting = HanabiCasting.new
@@ -154,6 +154,17 @@ hanabiCasting.run
 # 	break ←処理を抜けるときはbreakを使用
 # end
 
+# #while true内に
+# print "
+# 				1. データ登録
+# 				2. データの表示
+# 				3. データの検索
+# 				9. 終了
+# 			"
+# num = gets.chomp
+#を書かないと永遠ループしてしまう。
+# while trueは条件がtrueになった時にループが止まる。
+
 
 #細かな点
 # def initialize(name, age)
@@ -188,7 +199,7 @@ hanabiCasting.run
 # 	file.each {|value|
 # 		key, name, position, number = value.chomp.split(',')
 # 		# 蔵書データ1件分のインスタンスを作成してハッシュに登録する
-# 		@player[key] = 
+# 		@player[key] =
 # 		OsakaToin.new(name, position, number.to_i)
 # 	}
 # }
@@ -308,7 +319,7 @@ hanabiCasting.run
 #   '投手',
 #   '16'
 #   )
-# toinGakuenInfo["大阪桐蔭選手紹介2"] = ToinGakuenInfo.new( 
+# toinGakuenInfo["大阪桐蔭選手紹介2"] = ToinGakuenInfo.new(
 # 	'永谷 弘樹',
 # 	'三年生',
 # 	'二塁手',
@@ -386,7 +397,7 @@ hanabiCasting.run
 # 			else
 # 				check += 1
 # 			end
-			
+
 # 			foundBreaking[key] = value if flag == 1 && check < 1
 # 		}
 # 		puts "\n--------------------------"
@@ -408,7 +419,7 @@ hanabiCasting.run
 # 				9.データの終了
 # 			"
 # 			num = gets.chomp
-# 			case 
+# 			case
 # 			when '1' == num
 # 				add
 # 			when '2' == num
