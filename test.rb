@@ -69,25 +69,28 @@ class HanabiCasting
 
     @foundCast = {}
 
-    if hanabi != ''
-      flag = 1
-      check = 0
-      @cast.each { |key, value|
+
+    @cast.each do |key, value|
+      # hanabiに入力されていたら
+      if hanabi != ''
+        flag = 1
+        check = 0
         flag = 0 if hanabi.name =~ /^"#{value.name}"/
         flag = 0 if hanabi.desc != value.desc
         @foundCast[key] = value if flag == 1 && check < 1
-      }
-      if @foundCast.size > 0
-        puts "\n-----------------------------"
-        @foundCast.each { |key, value|
+      else
+        check += 1
+      end
+    end
+    # @foundCastの件数が上記でエラーもかからず0でなければ
+    if @foundCast.size > 0
+      puts "\n-----------------------------"
+        @foundCast.each do |key, value|
           print value.toFormatString
           puts "\n-----------------------------"
-        }
-      else
-        print "指定された条件がありません"
-      end
+        end
     else
-      check += 1
+      puts "指定された条件がありません"
     end
   end
   def run
