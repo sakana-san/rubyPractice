@@ -66,45 +66,33 @@ class HanabiCasting
 		end
 	end
 	def search
-		hanabi = Hanabi.new('', '')
 		print "\n"
 		print 'キー:'
 		key = gets.chomp
 
-		# 空白入力でなければ
-		if key != ''
-			@db.transaction do
-				#Pstoreからのデータがあれば出力、なければエラー文言を返す
-				searchAnswer = (@db.root?(key)) ? @db[key].toFormatString : '指定された条件がありません'
-				print searchAnswer
-			end
-		else
-			print '入力してください'
+		@db.transaction do
+			#Pstoreからのデータがあれば出力、なければエラー文言を返す
+			searchAnswer = (@db.root?(key)) ? @db[key].toFormatString : '指定された条件がありません'
+			print searchAnswer
 		end
 	end
 	def deleteCast
-		hanabi = Hanabi.new('', '')
 		print "\n"
 		print 'キー:'
 		key = gets.chomp
 
-		# 空白入力でなければ
-		if key != ''
-			@db.transaction do
-				if @db.root?(key)
-					print @db[key].toFormatString
-					print "\n削除しますか?(Y/yなら削除を実行します):"
-					answer = gets.chomp.upcase
-					if /^Y$/ =~ answer
-						@db.delete(key)
-						puts "\nデータベースから削除しました"
-					end
-				else
-					print '指定された条件がありません'
+		@db.transaction do
+			if @db.root?(key)
+				print @db[key].toFormatString
+				print "\n削除しますか?(Y/yなら削除を実行します):"
+				answer = gets.chomp.upcase
+				if /^Y$/ =~ answer
+					@db.delete(key)
+					puts "\nデータベースから削除しました"
 				end
+			else
+				print '指定された条件がありません'
 			end
-		else
-			print '入力してください'
 		end
 	end
 	def run
