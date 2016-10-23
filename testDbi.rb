@@ -79,7 +79,7 @@ class OsakaToinPlayer
 			row.each_with_name do |value, name|
 				print "#{@item[name]} #{value.to_s}"
 			end
-			puts "\n-------------------------"
+			puts "\n-----------------------------"
 			counts += 1
 		end
 		#実行結果の解放
@@ -111,6 +111,7 @@ class OsakaToinPlayer
 					name = \'#{osakaToin.name}\',
 					position = \'#{osakaToin.position}\',
 					grade = \'#{osakaToin.grade}\'
+		where id = \'#{key}\';
 		")
 		puts "\n修正しますた"
 	end
