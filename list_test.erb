@@ -1,0 +1,59 @@
+<%# -*- coding: utf-8 -*-%>
+<% require 'rubygems' # RubyGemsでインストールしたときには記述  %> 
+<% require 'dbi'      # DBIを使う %>
+
+<%# dbhを作成し、データベース'bookinfo_sqlite.db'に接続する %>
+<% dbh = DBI.connect( 'DBI:SQLite3:bookinfo_sqlite.db' ) %>
+
+<%# テーブルからデータを読み込んで結果のセットを得る %>
+<% sth = dbh.execute("select * from bookinfos;") %>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+  <link rel="stylesheet" type="text/css" href="default.css">
+  <title>蔵書管理</title>
+</head>
+<body>
+<h1>蔵書管理</h1>
+<h2>蔵書データの表示</h2>
+<p>処理する蔵書データを選択してください｜
+<a href="entry.erb">蔵書データの登録</a>｜
+<a href="retrieve.erb">蔵書データの検索</a>｜
+<a href="index.html">メニュー画面に戻る</a></p>
+
+<hr>
+<%# 修正データを表示する アクションはlist %>
+<form method="post" action="list">
+<table>
+<%# テーブルの項目名を取り出して表の項目行を表示する %>
+  <tr>
+    <th>削除</th><th>修正</th>
+<% sth.column_names.each do |name| %>
+    <th><%= "#{name}" %></th>
+<% end %>
+  </tr>
+
+<%# select文の実行結果を1件ずつrowに取り出し、繰り返し処理する %>
+<% sth.each do |row| %>
+  <tr>
+<%# each_with_nameメソッドで値と項目名を1件分ずつ取り出して表示する %>
+<%   row.each_with_name do |val, name| %>
+<%     if name == 'id' then %>
+<%#    valueに選択したidの値の後に処理（.delete, .edit）を結合した文字列を設定する %>
+       <td><input type="radio" name="operation" value=<%="#{val}.delete"%> /></td>
+       <td><input type="radio" name="operation" value=<%="#{val}.edit"%> /></td>
+<%     end %>
+       <td><%= "#{val.to_s}" %></td>
+<%   end %>
+  </tr>
+<% end %>
+</table>
+<input type="submit" value="選択した処理を実行" />
+<hr>
+</body>
+</html>
+<%# 実行結果を解放する %>
+<% sth.finish %>
+
+<%# データベースとの接続を終了する %>
+<% dbh.disconnect %>

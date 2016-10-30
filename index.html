@@ -7,17 +7,30 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 <body class="">
-	<header class="l-headerContent is-headerFIxed">
-		<p class="c-headerContentText">ここはヘッダーコンテントです</p>
+	<header class="header is-fixed js-header-position">
+		<p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
 	</header>
-	<div class="p-alreadyReadRating">
-		<div class="p-alreadyReadRatingLine"></div>
+	<div class="already-read-rating">
+		<div class="already-read-rating-line js-line-variable"></div>
 	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	<div class="player-manage js-measure-number">
+		<div class="player-manage__title">
+			<h1>選手の管理システム</h1>
+			<p >処理を選択してください</p>
+		</div>
+		<ul class="menu--vertical">
+			<li class="menu--vertical__item"><a href="list.erb">選手データの表示</a></li>
+			<li class="menu--vertical__item"><a href="entry.erb">選手データの登録</a></li>
+			<li class="menu--vertical__item"><a href="search.erb">選手データの検索</a></li>
+			<li class="menu--vertical__item">選手データの修正</a></li>
+			<li class="menu--vertical__item">選手データの削除</a></li>
+		</ul>
+	</div>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -26,12 +39,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -40,12 +53,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -54,12 +67,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -68,12 +81,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -82,12 +95,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -96,12 +109,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -110,12 +123,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -124,12 +137,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -138,12 +151,12 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
+	</article>
+	<article class="article js-measure-number">
+		<h1 class="article__title">東京</h1>
+		<div class="article__overview">
+			<p class="article__thumbnail">背景</p>
+			<div class="article__description">
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
 				<p>ここは東京です</p>
@@ -152,23 +165,10 @@
 				<p>ここは東京です</p>
 			</div>
 		</div>
-	</div>
-	<div class="p-cassettesContent">
-		<h1>東京</h1>
-		<div class="p-cassetesList">
-			<p class="p-cassetesBg">背景</p>
-			<div class="p-cassetesDescription">
-				<p>ここは東京です</p>
-				<p>ここは東京です</p>
-				<p>ここは東京です</p>
-				<p>ここは東京です</p>
-				<p>ここは東京です</p>
-				<p>ここは東京です</p>
-			</div>
-		</div>
-	</div>
-	<footer class="l-footerContent">
-		<p class="c-footerContentText">ここはヘッダーコンテントです</p>
+	</article>
+
+	<footer class="footer">
+		<p class="footer__text">ここはフッターコンテントです</p>
 	</footer>
 	<script src="./dist/js/vendor.js"></script>
 	<script src="./dist/js/app.js"></script>

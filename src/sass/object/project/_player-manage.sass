@@ -1,0 +1,47 @@
+%menu__item-layout
+  background: #ddd
+  box-sizing: border-box
+  text-align: center
+  font-size: 12px
+  font-weight: bold
+  cursor: pointer
+  &:hover
+    background: #f1f1f1
+  > a
+    display: block
+    color: $defaultColor
+
+.player-manage
+  +width
+  margin: 80px auto 0
+  padding: 20px
+  border: solid 2px $borderColor
+  box-sizing: border-box
+  &__title
+    margin-bottom: 10px
+    padding-left: 8px
+    padding-bottom: 4px
+    border-left: solid 1px #00BBDD
+    > h1
+      font-size: 20px
+    > p
+      color: #999
+      font-size: 11px
+
+.menu
+  &--vertical
+    &__item
+      @extend %menu__item-layout
+      margin-bottom: 6px
+      padding: 10px
+      background: #ddd
+      &:last-child
+        margin-bottom: 0
+  &--horizon
+    @extend %clearfix
+    &__item
+      @extend %menu__item-layout
+      float: left
+      margin-right: 10px
+      margin-bottom: 10px
+      padding: 10px 16px

@@ -5,7 +5,7 @@ function Rating() {
 
 Rating.prototype = {
 	initialize: function() {
-		this.totalCount = 11;
+		this.totalCount = 0;
 		this.currentNumber = 0;
 		this.getItemPositions();
 		this.bindScroll();
@@ -13,13 +13,12 @@ Rating.prototype = {
 	getItemPositions: function() {
 		var that = this;
 		this.cassettes = [];
-		this.headerHeight = $('.l-headerContent').outerHeight();
-		console.log(this.headerHeight);
-		this.$cassettes = $('.p-cassettesContent');
+		this.headerHeight = $('.js-header-position').outerHeight();
+		this.$cassettes = $('.js-measure-number');
 		$.each(that.$cassettes, function(index, value) {
 			//コンテンツのそれぞれの高さを計測
 			that.cassettes.push($(value).offset().top - that.headerHeight);
-			console.log(that.cassettes);
+			that.totalCount = index;
 		});
 	},
 	bindScroll: function() {
@@ -39,9 +38,9 @@ Rating.prototype = {
 		});
 	},
 	getArrivalFactor: function() {
-		this.alreadyReadRatingLine = $('.p-alreadyReadRatingLine');
-		//カセット数 / カセットのトータル * 100
-		var arrivalFactor = (this.currentNumber / this.totalCount) * 100;
+		this.alreadyReadRatingLine = $('.js-line-variable');
+		//カセット数 / カセットのトータル(0から数えてしまうので+1をしている) * 100
+		var arrivalFactor = (this.currentNumber / (this.totalCount + 1)) * 100;
 		this.alreadyReadRatingLine.css({'width': arrivalFactor + '%', 'display': 'block'});
 	}
 };
