@@ -1,3 +1,4 @@
+<%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
 <% # dbhを作成し、データベースに接続する %>
 <% dbh = DBI.connect('DBI:SQLite3:toinData.db') %>
@@ -26,15 +27,39 @@
 		<li class="menu--horizon__item"><a href="search.erb">選手データの検索</a></li>
 		<li class="menu--horizon__item"><a href="./">メニューに戻る</a></li>
 	</ul>
-	<div class="search-result">
-		<form method="post" action="list">
-		<% @sth.each do |row| %>
-				<% row.each_with_name do |value, name| %>
-						<li><%= "#{name} #{value.to_s}" %></li>
+	<form method="post" action="list">
+		<table  class="search-result">
+			<thead>
+			<tr>
+				<th class="search-result__title">削除</th>
+				<th class="search-result__title">修正</th>
+				<% @sth.column_names.each do |name| %>
+					<th class="search-result__title"><%= name %></th>
 				<% end %>
-		<% end %>
-		</form>
-	</div>
+			</tr>
+			</thead>
+			<tbody>
+				<% @sth.each do |row| %>
+					<tr>
+						<% row.each_with_name do |value, name| %>
+							<% if name == 'id' %>
+								<td class="search-result__item">
+									<input type="radio" name="operation" value= <%= "#{value}.delete" %>>
+								</td>
+									<td class="search-result__item">
+										<input type="radio" name="operation" value= <%= "#{value}.edit" %>>
+									</td>
+									<td class="search-result__item">
+										<%= "#{value.to_s}" %>
+									</td>
+							<% end %>
+						<% end %>
+					</tr>
+			<% end %>
+			</tbody>
+		</table>
+		<input type="submit" class="c-action-button" value="実行">
+	</form>
 </div>
 <footer class="footer">
 	<p class="footer__text">ここはフッターコンテントです</p>
