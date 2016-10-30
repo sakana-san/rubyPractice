@@ -85,10 +85,10 @@ class HanabiCasting
     # @foundCastの件数が上記でエラーもかからず0でなければ
     if @foundCast.size > 0
       puts "\n-----------------------------"
-        @foundCast.each do |key, value|
-          print value.toFormatString
-          puts "\n-----------------------------"
-        end
+      @foundCast.each do |key, value|
+        print value.toFormatString
+        puts "\n-----------------------------"
+      end
     else
       puts "指定された条件がありません"
     end
