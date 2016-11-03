@@ -1,7 +1,20 @@
-# -*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 require 'webrick'               # WEBrickを使うときには記述する
 require 'erb'
 require 'dbi'
+
+# これがないと日本語入力したときエラーになる
+# 修正パッチ
+class String
+  alias_method(:orig_concat, :concat)
+  def concat(value)
+    if RUBY_VERSION > "1.9"
+      orig_concat value.force_encoding('UTF-8')
+    else
+      orig_concat value
+    end
+  end
+end
 
 config = {
   :Port => 8088,
@@ -18,7 +31,7 @@ server = WEBrick::HTTPServer.new( config )
 server.config[:MimeTypes]["erb"] = "text/html"
 
 # 一覧表示からの処理
-# "http://localhost:8099/list" で呼び出される
+# "http://localhost:8088/list" で呼び出される
 server.mount_proc("/list") { |req, res|
   p req.query
   # 'operation'の値の後の（.delete, .edit）で処理を分岐する
@@ -34,6 +47,63 @@ server.mount_proc("/list") { |req, res|
     template = ERB.new( File.read('no_selected.erb') )
     res.body << template.result( binding )
   end
+}
+
+# 登録からの処理
+# "http://localhost:8088/entry" で呼び出される
+server.mount_proc("/entry") { |req, res|
+  p req.query
+  # @dbhを作成し、toinDarta.dbに接続する
+  @dbh = DBI.connect('DBI:SQLite3:toinData.db')
+  # idが使われていたら登録できない
+  rows = @dbh.select_one("select * from toinData where id='#{req.query['id']}';")
+  if rows
+    # データーベースとの接続終了
+    @dbh.disconnect
+    # 処理の結果を表示する
+    template = ERB.new(File.read('no_entried.erb'))
+    res.body << template.result( binding )
+  else
+    # テーブルにデータを追加する
+    @dbh.do("insert into toinData \
+      values(
+        '#{req.query['id']}',
+        '#{req.query['name']}',
+        '#{req.query['position']}',
+        '#{req.query['grade']}'
+      );
+    ")
+    @dbh.disconnect
+
+    # 処理の結果を表示する
+    template = ERB.new(File.read('entried.erb'))
+    res.body << template.result( binding )
+  end
+}
+
+# 検索の処理
+# "http://localhost:8088/entry" で呼び出される
+server.mount_proc("/search") { |req, res|
+  p req.query
+
+  # 検索条件の処理
+  condition = ['id', 'name', 'position', 'grade']
+  # 問い合わせ以外の条件を削除
+  condition.delete_if { |name| req.query[name] == ''}
+
+  if condition.empty?
+    where_data = ''
+  else
+    condition.map! { |name| "#{name}='#{req.query[name]}'"}
+    # 要素があるときは、where句に直す
+    #（現状、項目ごとの完全一致のorだけ）
+    where_data = "where " + condition.join(' or ')
+  end
+
+  # 処理の結果を表示する
+  # ERBを、ERBHandlerを経由せずに直接呼び出して利用している
+  template = ERB.new( File.read('searched.erb') )
+  res.body << template.result( binding )
 }
 
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく
