@@ -14,14 +14,14 @@
 </header>
 <div class="player-manage">
 	<div class="player-manage__title">
-		<h1>選手データの登録</h1>
-		<p>登録データを入力してください</p>
+		<h1>選手データの検索</h1>
+		<p>検索条件を入力してください</p>
 	</div>
 	<ul class="menu-horizon">
 		<li class="menu-horizon__item"><a href="list.erb">選手データの表示</a></li>
 		<li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
 	</ul>
-	<form method="post" action="entry">
+	<form method="post" action="search">
 		<table  class="data-list">
 			<thead>
 				<tr>
@@ -30,7 +30,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<% ['id','name','position','garade'].each do |name| %>
+				<% ['id', 'name', 'position', 'grade'].each do |name| %>
 					<tr>
 						<td class="data-list__item data-list__item--record-title"><%= name %></td>
 						<td class="data-list__item"><input type="text" name="<%= name %>"></td>
@@ -38,7 +38,7 @@
 				<% end %>
 			</tbody>
 		</table>
-		<input type="submit" class="c-action-button" value="実行">
+		<input type="submit" class="c-action-button" value="検索">
 	</form>
 </div>
 <footer class="footer">

@@ -2,8 +2,8 @@
 <% require 'dbi' %>
 <% # dbhを作成し、データベースに接続する %>
 <% dbh = DBI.connect('DBI:SQLite3:toinData.db') %>
-<% # テーブルからデータを読み込で結果を取得 %>
-<% @sth = dbh.execute("select * from toinData") %>
+<% # 該当するレコードを配列に収集する %>
+<% @rows = dbh.select_all("select * from toinData #{where_data};") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -19,41 +19,48 @@
 </header>
 <div class="player-manage">
 	<div class="player-manage__title">
-		<h1>選手の管理システム</h1>
-		<p >処理するデータを選択してください</p>
+		<h1>選手データの検索</h1>
+		<p>処理するデータを選択してください</p>
 	</div>
-	<ul class="menu-horizon">
-		<li class="menu-horizon__item"><a href="entry.erb">選手データの登録</a></li>
-		<li class="menu-horizon__item"><a href="search.erb">選手データの検索</a></li>
-		<li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
-	</ul>
-	<form method="post" action="list">
-		<table  class="data-list">
-			<thead>
-				<tr>
-					<th class="data-list__title">削除</th>
-					<th class="data-list__title">修正</th>
-					<% @sth.column_names.each do |name| %>
-						<th class="data-list__title"><%= name %></th>
-					<% end %>
-				</tr>
-			</thead>
-			<tbody>
-				<% @sth.each do |row| %>
+	<% unless @rows.size > 0 %>
+		<p class="player-manage__error">該当データがありません<br>検索条件を見直してください</p>
+		<ul class="menu-horizon">
+			<li class="menu-horizon__item"><a href="list.erb">選手データの表示</a></li>
+			<li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
+		</ul>
+	<% else %>
+		<ul class="menu-horizon">
+			<li class="menu-horizon__item"><a href="list.erb">選手データの表示</a></li>
+			<li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
+		</ul>
+		<form method="post" action="list">
+			<table  class="data-list">
+				<thead>
 					<tr>
-						<% row.each_with_name do |value, name| %>
-							<% if name == 'id' %>
-								<td class="data-list__item"><input type="radio" name="operation" value= <%= "#{value}.delete" %>></td>
-								<td class="data-list__item"><input type="radio" name="operation" value= <%= "#{value}.edit" %>></td>
-							<% end %>
-							<td class="data-list__item"><%= "#{value.to_s}" %></td>
+						<th class="data-list__title">削除</th>
+						<th class="data-list__title">修正</th>
+						<% ['id', 'name', 'position', 'grade'].each do |name| %>
+							<th class="data-list__title"><%= name %></th>
 						<% end %>
 					</tr>
-			<% end %>
-			</tbody>
-		</table>
-		<input type="submit" class="c-action-button" value="実行">
-	</form>
+				</thead>
+				<tbody>
+					<% dbh.select_all("select * from toinData #{where_data};") do |row| %>
+						<tr>
+							<% ['id', 'name', 'position', 'grade'].each do |name| %>
+									<% if name == 'id' %>
+											<td class="data-list__item"><input type="radio" name="operation" value= <%= "#{row[name]}.delete" %>></td>
+											<td class="data-list__item"><input type="radio" name="operation" value= <%= "#{row[name]}.edit" %>></td>
+									<% end %>
+									<td class="data-list__item"><%= "#{row[name].to_s}" %></td>
+							<% end %>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+			<input type="submit" class="c-action-button" value="実行">
+		</form>
+	<% end %>
 </div>
 <footer class="footer">
 	<p class="footer__text">ここはフッターコンテントです</p>
@@ -63,5 +70,4 @@
 </body>
 </html>
 
-<% @sth.finish %>
 <% dbh.disconnect %>

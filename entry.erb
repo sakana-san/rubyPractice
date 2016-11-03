@@ -1,9 +1,4 @@
-<%# -*- coding: utf-8 -*-%>
-<% require 'dbi' %>
-<% # dbhを作成し、データベースに接続する %>
-<% dbh = DBI.connect('DBI:SQLite3:toinData.db') %>
-<% # テーブルからデータを読み込で結果を取得 %>
-<% @sth = dbh.execute("select * from toinData") %>
+<%# -*- coding: utf-8 -*- %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -19,43 +14,28 @@
 </header>
 <div class="player-manage">
 	<div class="player-manage__title">
-		<h1>選手の管理システム</h1>
-		<p >処理するデータをを選択してください</p>
+		<h1>選手データの登録</h1>
+		<p>登録データを入力してください</p>
 	</div>
-	<ul class="menu--horizon">
-		<li class="menu--horizon__item"><a href="entry.erb">選手データの登録</a></li>
-		<li class="menu--horizon__item"><a href="search.erb">選手データの検索</a></li>
-		<li class="menu--horizon__item"><a href="./">メニューに戻る</a></li>
+	<ul class="menu-horizon">
+		<li class="menu-horizon__item"><a href="list.erb">選手データの表示</a></li>
+		<li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
 	</ul>
-	<form method="post" action="list">
-		<table  class="search-result">
+	<form method="post" action="entry">
+		<table  class="data-list">
 			<thead>
-			<tr>
-				<th class="search-result__title">削除</th>
-				<th class="search-result__title">修正</th>
-				<% @sth.column_names.each do |name| %>
-					<th class="search-result__title"><%= name %></th>
-				<% end %>
-			</tr>
+				<tr>
+					<th class="data-list__title">項目名</th>
+					<th class="data-list__title">入力データ</th>
+				</tr>
 			</thead>
 			<tbody>
-				<% @sth.each do |row| %>
+				<% ['id','name','position','grade'].each do |name| %>
 					<tr>
-						<% row.each_with_name do |value, name| %>
-							<% if name == 'id' %>
-								<td class="search-result__item">
-									<input type="radio" name="operation" value= <%= "#{value}.delete" %>>
-								</td>
-									<td class="search-result__item">
-										<input type="radio" name="operation" value= <%= "#{value}.edit" %>>
-									</td>
-									<td class="search-result__item">
-										<%= "#{value.to_s}" %>
-									</td>
-							<% end %>
-						<% end %>
+						<td class="data-list__item data-list__item--record-title"><%= name %></td>
+						<td class="data-list__item"><input type="text" name="<%= name %>"></td>
 					</tr>
-			<% end %>
+				<% end %>
 			</tbody>
 		</table>
 		<input type="submit" class="c-action-button" value="実行">
@@ -68,6 +48,3 @@
 <script src="./dist/js/app.js"></script>
 </body>
 </html>
-
-<% @sth.finish %>
-<% dbh.disconnect %>
