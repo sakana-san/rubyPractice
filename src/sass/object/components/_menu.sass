@@ -1,10 +1,38 @@
-.already-read-rating
-	position: fixed
-	top: 46px
-	left: 0
-	width: 100%
-	border-top: solid 2px #fff
-	&-line
-		display: none
-		border-top: solid 4px #00BBDD
-		box-sizing: border-box
+%menu__item-layout
+  display: block
+  background: #ddd
+  box-sizing: border-box
+  text-align: center
+  color: #4a4a4a
+  font-size: 12px
+  font-weight: bold
+  text-decoration: none
+  cursor: pointer
+
+.menu
+  &-vertical
+    &__item
+      > a
+        @extend %menu__item-layout
+        margin-bottom: 6px
+        padding: 10px
+        &:hover
+          background: #f1f1f1
+      &--later
+        @extend %menu__item-layout
+        margin-bottom: 6px
+        padding: 10px
+        cursor: inherit
+        &:last-child
+          margin-bottom: 0
+  &-horizon
+    @extend %clearfix
+    &__item
+      float: left
+      > a
+        @extend %menu__item-layout
+        margin-right: 10px
+        margin-bottom: 10px
+        padding: 10px 16px
+        &:hover
+          background: #f1f1f1
