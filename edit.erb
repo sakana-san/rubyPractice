@@ -1,0 +1,62 @@
+<%# -*- coding: utf-8 -*-%>
+<% require 'dbi' %>
+<% # dbhを作成し、データベースに接続する %>
+<% dbh = DBI.connect('DBI:SQLite3:toinData.db') %>
+<% # テーブルからデータを読み込で結果を取得 %>
+<% @sth = dbh.execute("select * from toinData where id = \'#{target_id}\'") %>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>データの修正</title>
+	<link rel="stylesheet" href="./dist/css/common.css" type="text/css" >
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
+<body>
+<header class="header is-fixed js-header-position">
+	<p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
+</header>
+<div class="player-manage">
+	<div class="player-manage__title">
+		<h1>選手データの修正</h1>
+		<p >このデータを修正します</p>
+	</div>
+	<ul class="menu-horizon">
+		<li class="menu-horizon__item"><a href="list.erb">選手データの表示</a></li>
+		<li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
+	</ul>
+	<form method="post" action="edit">
+		<input type="hidden" name="id" value="<%= target_id %>">
+		<table  class="data-list">
+			<% @sth.each do |row| %>
+				<thead>
+					<tr>
+						<th class="data-list__title">項目名</th>
+						<th class="data-list__title">入力データ</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% ['id', 'name', 'position', 'grade'].each do |name| %>
+						<tr>
+							<td class="data-list__item"><%= name %></td>
+							<% if name == 'id' %>
+									<td class="data-list__item"><%= row[name] %></td>
+							<% else %>
+									<td class="data-list__item"><input name="<%= name %>" value="<%= row[name] %>" size="60" /></td>
+							<% end %>
+						</tr>
+					<% end %>
+				</tbody>
+			<% end %>
+		</table>
+		<input type="submit" class="c-action-button" value="修正を実行">
+	</form>
+</div>
+<footer class="footer">
+	<p class="footer__text">ここはフッターコンテントです</p>
+</footer>
+<script src="./dist/js/vendor.js"></script>
+<script src="./dist/js/app.js"></script>
+</body>
+</html>

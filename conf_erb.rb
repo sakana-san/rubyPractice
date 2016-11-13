@@ -37,15 +37,15 @@ server.mount_proc("/list") { |req, res|
   # 'operation'の値の後の（.delete, .edit）で処理を分岐する
   if /(.*)\.(delete|edit)$/ =~ req.query['operation']
     target_id = $1
-    oparation = $2
+    operation = $2
     # 選択された処理を実行する画面に移行する
     # ERBを、ERBHandlerを経由せずに直接呼び出して利用している
     template = ERB.new(File.read('delete.erb')) if operation == 'delete'
     template = ERB.new(File.read('edit.erb')) if operation == 'edit'
-    res.body << template.result(building)
+    res.body << template.result(binding)
   else #データが選択されていないなど
     template = ERB.new( File.read('no_selected.erb') )
-    res.body << template.result( binding )
+    res.body << template.result(binding)
   end
 }
 
@@ -105,6 +105,44 @@ server.mount_proc("/search") { |req, res|
   template = ERB.new( File.read('searched.erb') )
   res.body << template.result( binding )
 }
+# 修正の処理
+# "http://localhost:8088/entry" で呼び出される
+server.mount_proc("/edit") { |req, res|
+  p req.query
+  # dbhを作成し、データベース'toinData.db'に接続する
+  @dbh = DBI.connect('DBI:SQlite3:toinData.db')
+  @dbh.do("update toinData set \
+    name='#{req.query['name']}',\
+    position='#{req.query['position']}',\
+    grade ='#{req.query['grade']}'
+    where id='#{req.query['id']}';
+  ")
+  # データーベースとの接続を終了する
+  @dbh.disconnect
+  #処理を表示する
+  # ERBを、ERBHandlerを軽種せずに直接呼び出して利用している
+  template = ERB.new( File.read('edited.erb'))
+  res.body << template.result(binding)
+}
+
+# 削除の処理
+# "http://localhost:8099/delete" で呼び出される
+server.mount_proc("/delete") { |req, res|
+  p req.query
+  # dbhを作成し、データベース'toinData.db'に接続する
+  @dbh = DBI.connect('DBI:SQlite3:toinData.db')
+  # テーブルからデータを削除する
+  @dbh.do("delete from toinData where id='#{req.query['id']}';")
+  # データベースの接続を終了する
+  @dbh.disconnect
+
+  # 処理の結果を表示する
+  # ERBを、ERBHandlerを経由せずに直接呼び出して利用している
+  template = ERB.new( File.read('deleted.erb') )
+  res.body << template.result(binding)
+
+}
+
 
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく
 trap(:INT) do
