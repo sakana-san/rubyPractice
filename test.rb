@@ -441,3 +441,129 @@ hanabiCasting.run
 # breakingInfo = BreakingInfo.new
 # breakingInfo.setUP
 # breakingInfo.run
+
+
+
+# class CreatorsFileAkiyama
+#   def initialize(name, trade)
+#     @name = name
+#     @trade = trade
+#   end
+#   attr_accessor :name, :trade
+#   def to_s
+#     "#{@name},#{@trade}"
+#   end
+#   def toFormatString(sep="\n")
+#     "名前: #{@name}, 職業:#{@trade}#{sep}"
+#   end
+# end
+#
+# class AkiyamaCharactor
+#   def initialize
+#     @cast = {}
+#   end
+#   def add
+#     creatorsFileAkiyama = CreatorsFileAkiyama.new("", "")
+#     print"\n"
+#     print "キー"
+#     key = gets.chomp
+#
+#     print "名前:"
+#     creatorsFileAkiyama.name = gets.chomp()
+#     print "職業:"
+#     creatorsFileAkiyama.trade = gets.chomp()
+#
+#     unless creatorsFileAkiyama.name == '' || creatorsFileAkiyama.trade == ''
+#       @cast[key] = creatorsFileAkiyama
+#     else
+#       errorAnswer = '入力してください'
+#       puts errorAnswer
+#     end
+#   end
+#   def list
+#     @cast.each do |index, value|
+#       puts value.toFormatString
+#     end
+#   end
+#   def search
+#     creatorsFileAkiyama = CreatorsFileAkiyama.new("", "")
+#     print"\n"
+#     print "キー"
+#     key = gets.chomp
+#     print "名前:"
+#     creatorsFileAkiyama.name = gets.chomp()
+#     print "職業:"
+#     creatorsFileAkiyama.trade = gets.chomp()
+#
+#     @foundCast = {}
+#     @cast.each do |index, value|
+#       flag = 1
+#       check = 0
+#       if creatorsFileAkiyama != ''
+#         flag = 0 if creatorsFileAkiyama.name =~ /^"#{value.name}"/
+#         flag = 0 if creatorsFileAkiyama.trade != value.trade
+#       else
+#         check += 1
+#       end
+#       @foundCast[key] = value if flag == 1 && check < 1
+#       if @foundCast.size > 0
+#         puts "-------------------------------------"
+#         @foundCast.each do |index, value|
+#           puts value.toFormatString
+#           puts "-------------------------------------"
+#         end
+#       else
+#         puts '指定された項目が入力されていません'
+#       end
+#     end
+#   end
+#   def modify
+#     creatorsFileAkiyama = CreatorsFileAkiyama.new("", "")
+#     print"\n"
+#     print "キー"
+#     key = gets.chomp
+#     print "名前:"
+#     creatorsFileAkiyama.name = gets.chomp()
+#     print "職業:"
+#     creatorsFileAkiyama.trade = gets.chomp()
+#     @modifyCast = {}
+#     @cast.each do |index, value|
+#       if creatorsFileAkiyama != '' && index == key
+#         value.name = creatorsFileAkiyama.name
+#         value.trade = creatorsFileAkiyama.trade
+#         return @modifyCast[key] = value
+#       else
+#         puts '指定された項目が入力されていません'
+#       end
+#     end
+#
+#   end
+#   def run
+#     while true
+#       print "
+#         1, データの登録
+#         2. データの表示
+#         3. データの検索
+#         4. データの修正
+#         9. 終了
+#       "
+#       num = gets.chomp()
+#       case
+#         when "1" == num
+#           add
+#         when "2" == num
+#           list
+#         when "3" == num
+#           search
+#         when "4" == num
+#           modify
+#         when "9" == num
+#           break;
+#         else
+#       end
+#     end
+#   end
+# end
+#
+# akiyama =  AkiyamaCharactor.new
+# akiyama.run
