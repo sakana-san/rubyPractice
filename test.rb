@@ -91,7 +91,6 @@ class HanabiCasting
         1. データ登録
         2. データの表示
         3. データの検索
-        4. データの修正
         9. 終了
       "
       num = gets.chomp

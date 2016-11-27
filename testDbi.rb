@@ -71,11 +71,11 @@ class OsakaToinPlayer
     puts "\n データの表示"
 
     #テーブルからデータを読み込んで表示
-    sth = @dbh.execute('select * from toinData')
-    #select分を1件ずつrowに取り出し繰り返し処理
+    sth = @dbh.execute("select * from toinData")
+    #rowに1件分の情報が入ってる
     sth.each do |row|
       puts "\n-----------------------------"
-      #each_with_nameメソッドで値と項目名を取り出す
+      #rowに1件分の情報があるので、そこからeach_with_nameメソッドで値と項目名を取り出す
       row.each_with_name do |value, name|
         print "#{@item[name]} #{value.to_s}"
       end
@@ -105,15 +105,20 @@ class OsakaToinPlayer
     print "学年:"
     osakaToin.grade = gets.chomp
 
-    # レコードのデータを修正する
-    @dbh.do("update toinData
-      set id = \'#{key}\',
-          name = \'#{osakaToin.name}\',
-          position = \'#{osakaToin.position}\',
-          grade = \'#{osakaToin.grade}\'
-    where id = \'#{key}\';
-    ")
-    puts "\n修正しますた"
+    if osakaToin.name != '' && osakaToin.position != '' && osakaToin.grade != ''
+      # レコードのデータを修正する
+      @dbh.do("update toinData
+        set id = \'#{key}\',
+            name = \'#{osakaToin.name}\',
+            position = \'#{osakaToin.position}\',
+            grade = \'#{osakaToin.grade}\'
+      where id = \'#{key}\';
+      ")
+      puts "\n修正しますた"
+    else
+      puts "\n内容がないので修正できません"
+    end
+
   end
   def delete
     print "\n8. データの削除"
