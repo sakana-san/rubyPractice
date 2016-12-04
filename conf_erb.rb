@@ -55,7 +55,7 @@ server.mount_proc("/entry") { |req, res|
     # データーベースとの接続終了
     @dbh.disconnect
     # 処理の結果を表示する
-    template = ERB.new(File.read('no_entried.erb'))
+    template = ERB.new(File.read('noentried.erb'))
     res.body << template.result( binding )
   else
     # テーブルにデータを追加する
