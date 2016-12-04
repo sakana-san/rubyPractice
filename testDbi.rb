@@ -28,11 +28,11 @@ class OsakaToinPlayer
     if /^Y$/ =~ answer
       @dbh.do("drop table if exists toinData")
       @dbh.do("create table toinData(
-        id   varchar(50)  not null,
-        name varchar(100)  not null,
-        position  varchar(100)  not null,
-        grade  varchar(50)  not null,
-        primary         key(id)
+        id        varchar(50)  not null,
+        name      varchar(100) not null,
+        position  varchar(100) not null,
+        grade     varchar(50)  not null,
+        primary   key(id)
       );")
       puts "\n初期化しました"
     end
