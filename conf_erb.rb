@@ -30,6 +30,24 @@ server = WEBrick::HTTPServer.new(config)
 # erbのMIMEタイプを設定
 server.config[:MimeTypes]["erb"] = " text/html"
 
+server.mount_proc("/init") { |req, res|
+  p req.query
+  # @dbhを作成し、toinDarta.dbに接続する
+  @dbh = DBI.connect('DBI:SQLite3:hanabi.db')
+
+  @dbh.do("drop table if exists hanabi")
+  @dbh.do("create table hanabi(
+    id   varchar(50)  not null,
+    cast varchar(100)  not null,
+    role  varchar(100)  not null
+  );")
+
+  # 処理の結果を表示する
+  template = ERB.new(File.read('inited.erb'))
+  res.body << template.result( binding )
+}
+
+
 server.mount_proc("/list") { |req, res|
   p req.query
   if /(.*)\.(delete|edit)$/ =~ req.query['operation']
@@ -49,6 +67,7 @@ server.mount_proc("/entry") { |req, res|
   p req.query
   # @dbhを作成し、toinDarta.dbに接続する
   @dbh = DBI.connect('DBI:SQLite3:hanabi.db')
+
   # idが使われていたら登録できない
   rows = @dbh.select_one("select * from hanabi where id='#{req.query['id']}';")
   if rows
@@ -58,6 +77,7 @@ server.mount_proc("/entry") { |req, res|
     template = ERB.new(File.read('noentried.erb'))
     res.body << template.result( binding )
   else
+
     # テーブルにデータを追加する
     @dbh.do("insert into hanabi \
       values(
@@ -67,7 +87,6 @@ server.mount_proc("/entry") { |req, res|
       );
     ")
     @dbh.disconnect
-    binding.pry
     # 処理の結果を表示する
     template = ERB.new(File.read('entried.erb'))
     res.body << template.result( binding )
