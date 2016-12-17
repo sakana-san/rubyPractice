@@ -151,11 +151,11 @@ hanabiCasting.run
 
 # #while true内に
 # print "
-# 				1. データ登録
-# 				2. データの表示
-# 				3. データの検索
-# 				9. 終了
-# 			"
+#         1. データ登録
+#         2. データの表示
+#         3. データの検索
+#         9. 終了
+#       "
 # num = gets.chomp
 #を書かないと永遠ループしてしまう。
 # while trueは条件がtrueになった時にループが止まる。
@@ -163,26 +163,26 @@ hanabiCasting.run
 
 #細かな点
 # def initialize(name, age)
-# 		#濁点があると、putsで配列が表示されてしまう
-# 		@name = name,
-# 		@age = age
-# 	end
+#     #濁点があると、putsで配列が表示されてしまう
+#     @name = name,
+#     @age = age
+#   end
 # [hoge, fuga], hoge
 
 #toFormatStringの中でputsしない。 ハッシュのタイトルが一番下に表示されてしまう
 # def  toFormatString(sep = "\n")
-# 	"#{@title}#{sep}#{@author}#{sep}#{@page}#{sep}#{@publish_date}#{sep}"
+#   "#{@title}#{sep}#{@author}#{sep}#{@page}#{sep}#{@publish_date}#{sep}"
 # end
 
 #クラス内でputsしてたら、一番下のプロパティでputsしない
 #したら中身全部呼ばれる
 #悪い例:
 #class Member
-#	def print
-#		@cast.each{ |key, value|
-#			puts "#{key}: #{value}.toFormatString"
-#		}
-#	end
+# def print
+#   @cast.each{ |key, value|
+#     puts "#{key}: #{value}.toFormatString"
+#   }
+# end
 #end
 #member = Member.new
 #puts member.list
@@ -191,12 +191,12 @@ hanabiCasting.run
 #変数にkeyがないとエラーになる
 # def setUpPlayer
 # open(@csv, "r:UTF-8") {|file|
-# 	file.each {|value|
-# 		key, name, position, number = value.chomp.split(',')
-# 		# 蔵書データ1件分のインスタンスを作成してハッシュに登録する
-# 		@player[key] =
-# 		OsakaToin.new(name, position, number.to_i)
-# 	}
+#   file.each {|value|
+#     key, name, position, number = value.chomp.split(',')
+#     # 蔵書データ1件分のインスタンスを作成してハッシュに登録する
+#     @player[key] =
+#     OsakaToin.new(name, position, number.to_i)
+#   }
 # }
 # # @player['大阪桐蔭投手: 選手紹介'] = OsakaToin.new("根尾昴", "投手", 18)
 # # @player["大阪桐蔭内野手: 選手紹介"] = OsakaToin.new("永広", "二塁手", 5)
