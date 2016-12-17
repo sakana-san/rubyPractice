@@ -37,9 +37,10 @@ server.mount_proc("/init") { |req, res|
 
   @dbh.do("drop table if exists hanabi")
   @dbh.do("create table hanabi(
-    id   varchar(50)  not null,
-    cast varchar(100)  not null,
-    role  varchar(100)  not null
+    id       varchar(50)  not null,
+    cast     varchar(100)  not null,
+    role     varchar(100)  not null,
+    primary  key(id)
   );")
 
   # 処理の結果を表示する
@@ -91,6 +92,24 @@ server.mount_proc("/entry") { |req, res|
     template = ERB.new(File.read('entried.erb'))
     res.body << template.result( binding )
   end
+}
+
+server.mount_proc("/search") { |req, res|
+  p req.query
+
+  title = ['id', 'cast', 'role']
+  title.delete_if { |name| req.query[name] == '' }
+
+  if title.empty?
+    where_data = ''
+  else
+    title.map! { |name| "#{name}='#{req.query[name]}'" }
+    where_data = "where" + title.join(' or ')
+  end
+
+  # 処理の結果を表示する
+  template = ERB.new(File.read('searched.erb'))
+  res.body << template.result( binding )
 }
 
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく

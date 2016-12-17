@@ -1,7 +1,6 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
 
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -14,17 +13,33 @@
 <header class="header is-fixed js-header-position">
   <p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
 </header>
-<div class="player-manage--init">
+<div class="player-manage">
   <div class="player-manage__title">
     <h1>打ち上げ花火下から見るか、横から見るか</h1>
-    <p>処理するデータを初期化します</p>
+    <p>検索条件を入力してください</p>
   </div>
   <ul class="menu-horizon">
+    <li class="menu-horizon__item"><a href="list.erb">キャストの表示</a></li>
     <li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
   </ul>
-  <p class="player-manage__text">初期化しますか？初期化するなら実行を押してください</p>
-  <form method="post" action="init">
-    <input type="submit" class="c-action-button is-attention" value="実行">
+  <form method="post" action="search">
+    <table class="data-list">
+      <thead>
+        <tr>
+          <th class="data-list__title">項目名</th>
+          <th class="data-list__title">検データ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% ['id', 'cast', 'role'].each do |name| %>
+          <tr>
+            <td class="data-list__item"><%= name %></td>
+            <td class="data-list__item"><input type="text" name="<%= name %>" ></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <input type="submit" class="c-action-button" value="実行">
   </form>
 </div>
 <footer class="footer">
