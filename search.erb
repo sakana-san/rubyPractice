@@ -1,45 +1,44 @@
-<%# -*- coding: utf-8 -*-%>
-<% require 'dbi' %>
+<%# -*- coding: utf-8 -*- %>
 
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title>データの表示</title>
-  <link rel="stylesheet" href="./dist/css/common.css" type="text/css">
+  <link rel="stylesheet" href="./dist/css/common.css" type="text/css" >
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 <body>
-<header class="header is-fixed js-header-position">
+<header class="header">
   <p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
 </header>
 <div class="player-manage">
-  <div class="player-manage_heading">
-    <h1 class="player-manage_title">打ち上げ花火下から見るか、横から見るか</h1>
-    <p class="player-manage__processing">検索条件を入力してください</p>
+  <div class="player-manage__title">
+    <h1>選手データの検索</h1>
+    <p>検索条件を入力してください</p>
   </div>
   <ul class="menu-horizon">
-    <li class="menu-horizon__item"><a href="list.erb">キャストの表示</a></li>
+    <li class="menu-horizon__item"><a href="list.erb">選手データの表示</a></li>
     <li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
   </ul>
   <form method="post" action="search">
-    <table class="data-list">
+    <table  class="data-list">
       <thead>
-        <tr>
-          <th class="data-list__title">項目名</th>
-          <th class="data-list__title">検データ</th>
-        </tr>
+      <tr>
+        <th class="data-list__title">項目名</th>
+        <th class="data-list__title">入力データ</th>
+      </tr>
       </thead>
       <tbody>
-        <% ['id', 'cast', 'role'].each do |name| %>
+      <% ['id', 'cast', 'role'].each do |name| %>
           <tr>
-            <td class="data-list__item"><%= name %></td>
-            <td class="data-list__item"><input type="text" name="<% name %>"></td>
+            <td class="data-list__item data-list__item--record-title"><%= name %></td>
+            <td class="data-list__item"><input type="text" name="<%= name %>"></td>
           </tr>
-        <% end %>
+      <% end %>
       </tbody>
     </table>
-    <input type="submit" class="c-action-button" value="実行">
+    <input type="submit" class="c-action-button" value="検索">
   </form>
 </div>
 <footer class="footer">
