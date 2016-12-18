@@ -29,7 +29,7 @@
     <li class="menu-horizon__item"><a href="list.erb">キャストの表示</a></li>
     <li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
   </ul>
-  <% @rows.size > 0 %>
+  <% if @rows.size > 0 %>
     <form method="post" action="list">
       <table class="data-list">
         <thead>

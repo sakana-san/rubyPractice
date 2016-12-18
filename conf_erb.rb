@@ -26,6 +26,24 @@ server = WEBrick::HTTPServer.new(config)
 # erbのMIMEタイプを設定
 server.config[:MimeTypes]["erb"] = " text/html"
 
+server.mount_proc("/init") { |req, res|
+  p req.query
+  # @dbhを作成し、hanabi.dbに接続する
+  @dbh = DBI.connect('DBI:SQLite3:hanabi.db')
+
+  @dbh.do("drop table if exists hanabi")
+  @dbh.do("create table hanabi(
+    id       varchar(50)  not null,
+    cast     varchar(100)  not null,
+    role     varchar(100)  not null,
+    primary  key(id)
+  );")
+
+  # 処理の結果を表示する
+  template = ERB.new(File.read('inited.erb'))
+  res.body << template.result( binding )
+}
+
 server.mount_proc('/list') { |req, res|
 
   if /(.*)\.(delete|edit)$/ =~ req.query['operation']
