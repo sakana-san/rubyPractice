@@ -19,7 +19,7 @@
 <div class="player-manage">
   <div class="player-manage__heading">
     <h1 class="player-manage__title">打ち上げ花火下から見るか、横から見るか</h1>
-    <% @rows.size > 0 %>
+    <% if @rows.size > 0 %>
       <p class="player-manage__processing">処理する選択条件を入力してください</p>
     <% else %>
       <p class="player-manage__error">検索条件を見直してから実行してください</p>
