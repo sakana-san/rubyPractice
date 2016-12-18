@@ -1,10 +1,4 @@
 <%# -*- coding: utf-8 -*-%>
-<% require 'dbi' %>
-<% # dbhを作成し、データベースに接続する %>
-<% dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
-<% # テーブルからデータを読み込で結果を取得 %>
-<% @sth = dbh.execute("select * from hanabi") %>
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -18,12 +12,12 @@
   <p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
 </header>
 <div class="player-manage">
-  <div class="player-manage__title">
-    <h1>打ち上げ花火下から見るか、横から見るか</h1>
-    <p>登録データを入力してください</p>
+  <div class="player-manage__heading">
+    <h1 class="player-manage__title">打ち上げ花火下から見るか、横から見るか</h1>
+    <p  class="player-manage__processing">登録データを入力してください</p>
   </div>
   <ul class="menu-horizon">
-    <li class="menu-horizon__item"><a href="entry.erb">キャストの表示</a></li>
+    <li class="menu-horizon__item"><a href="list.erb">キャストの表示</a></li>
     <li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
   </ul>
   <form method="post" action="entry">
@@ -53,6 +47,3 @@
 <script src="./dist/js/app.js"></script>
 </body>
 </html>
-
-<% @sth.finish %>
-<% dbh.disconnect %>

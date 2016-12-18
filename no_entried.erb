@@ -1,9 +1,4 @@
 <%# -*- coding: utf-8 -*-%>
-<% require 'dbi' %>
-<% # dbhを作成し、データベースに接続する %>
-<% dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
-<% # テーブルからデータを読み込で結果を取得 %>
-<% @sth = dbh.execute("select * from hanabi") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -18,14 +13,14 @@
   <p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
 </header>
 <div class="player-manage">
-  <div class="player-manage__title">
-    <h1>打ち上げ花火下から見るか、横から見るか</h1>
-    <p>処理対象が選択されていません</p>
-    <p>データを選択してから実行してください</p>
+  <div class="player-manage__heading">
+    <h1 class="player-manage__title">打ち上げ花火下から見るか、横から見るか</h1>
+    <p class="player-manage__error">指定したidは既に使われています</p>
+    <p class="player-manage__error">登録データを変更してから実行してください</p>
   </div>
   <ul class="menu-horizon">
     <li class="menu-horizon__item"><a href="entry.erb">キャストの登録</a></li>
-    <li class="menu-horizon__item"><a href="search.erb">キャストの検索</a></li>
+    <li class="menu-horizon__item"><a href="list.erb">キャストの表示</a></li>
     <li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
   </ul>
 </div>
@@ -36,6 +31,3 @@
 <script src="./dist/js/app.js"></script>
 </body>
 </html>
-
-<% @sth.finish %>
-<% dbh.disconnect %>

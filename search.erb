@@ -14,9 +14,9 @@
   <p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
 </header>
 <div class="player-manage">
-  <div class="player-manage__title">
-    <h1>打ち上げ花火下から見るか、横から見るか</h1>
-    <p>検索条件を入力してください</p>
+  <div class="player-manage_heading">
+    <h1 class="player-manage_title">打ち上げ花火下から見るか、横から見るか</h1>
+    <p class="player-manage__processing">検索条件を入力してください</p>
   </div>
   <ul class="menu-horizon">
     <li class="menu-horizon__item"><a href="list.erb">キャストの表示</a></li>
@@ -34,7 +34,7 @@
         <% ['id', 'cast', 'role'].each do |name| %>
           <tr>
             <td class="data-list__item"><%= name %></td>
-            <td class="data-list__item"><input type="text" name="<%= name %>" ></td>
+            <td class="data-list__item"><input type="text" name="<% name %>"></td>
           </tr>
         <% end %>
       </tbody>
