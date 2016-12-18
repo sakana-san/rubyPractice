@@ -78,7 +78,7 @@ server.mount_proc('/search') { |req, res|
 
   unless search_title.empty?
     search_title.map! { |name| "#{name}='#{req.query[name]}'" }
-    where_data = "where " + search_title.join('or')
+    where_data = "where " + search_title.join(' or ')
 
     template = ERB.new( File.read('searched.erb'))
     res.body << template.result(binding)

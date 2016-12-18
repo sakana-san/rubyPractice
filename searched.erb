@@ -30,27 +30,33 @@
     <li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
   </ul>
   <% @rows.size > 0 %>
-  <form method="post" action="list">
-    <table class="data-list">
-      <thead>
-      <tr>
-        <th class="data-list__title">削除</th>
-        <th class="data-list__title">修正</th>
-        <% ['id', 'cast', 'role'].each do |name| %>
-          <th class="data-list__title"><%= name %></th>
-        <% end %>
-      </tr>
-      </thead>
-      <tbody>
-        <% @dbh.select_all("select * from hanabi #{where_data};") do |row| %>
-          <tr>
-            <td></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </form>
-  <% else %>
+    <form method="post" action="list">
+      <table class="data-list">
+        <thead>
+        <tr>
+          <th class="data-list__title">削除</th>
+          <th class="data-list__title">修正</th>
+          <% ['id', 'cast', 'role'].each do |name| %>
+            <th class="data-list__title"><%= name %></th>
+          <% end %>
+        </tr>
+        </thead>
+        <tbody>
+          <% @dbh.select_all("select * from hanabi #{where_data};") do |row| %>
+            <tr>
+              <% ['id', 'cast', 'role'].each do |name| %>
+                <% if name == 'id' %>
+                  <td class="data-list__item"><input type="radio" name="operation" value=""<%="#{row}.delete" %>></td>
+                  <td class="data-list__item"><input type="radio" name="operation" value=""<%="#{row}.edit" %>></td>
+                <% end %>
+                <td class="data-list__item"><%= row[name] %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <input type="submit" class="c-action-button" value="実行">
+    </form>
   <% end %>
 </div>
 <footer class="footer">
