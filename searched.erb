@@ -46,10 +46,10 @@
             <tr>
               <% ['id', 'cast', 'role'].each do |name| %>
                 <% if name == 'id' %>
-                  <td class="data-list__item"><input type="radio" name="operation" value=""<%="#{row}.delete" %>></td>
-                  <td class="data-list__item"><input type="radio" name="operation" value=""<%="#{row}.edit" %>></td>
+                  <td class="data-list__item"><input type="radio" name="operation" value=<%="#{row[name]}.delete" %>></td>
+                  <td class="data-list__item"><input type="radio" name="operation" value=<%="#{row[name]}.edit" %>></td>
                 <% end %>
-                <td class="data-list__item"><%= row[name] %></td>
+                <td class="data-list__item"><%= row[name].to_s %></td>
               <% end %>
             </tr>
           <% end %>

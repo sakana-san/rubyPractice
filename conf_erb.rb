@@ -8,7 +8,7 @@ require 'dbi'
 class String
   alias_method(:orig_concat, :concat)
   def concat(value)
-    if RUBY_VERSION > "2.3"
+    if RUBY_VERSION > "1.9"
       orig_concat value.force_encoding('UTF-8')
     else
       orig_concat value
@@ -51,11 +51,8 @@ server.mount_proc('/list') { |req, res|
     target_id = $1
     operation = $2
 
-    if operation == 'delete'
-      template = ERB.new( File.read('delete.erb'))
-    elsif operation == 'edit'
-      template = ERB.new(File.read('edit.erb'))
-    end
+    template = ERB.new(File.read('delete.erb')) if operation == 'delete'
+    template = ERB.new(File.read('edit.erb')) if operation == 'edit'
     res.body << template.result(binding)
   else
     template = ERB.new(File.read('no_selected.erb'))
@@ -70,9 +67,9 @@ server.mount_proc('/entry') { |req, res|
   @rows = @dbh.select_one("select * from hanabi where id='#{req.query['id']}';")
 
   unless @rows
-    @dbh.do("insert into hanabi \ values(
-      '#{req.query['id']}',\
-      '#{req.query['cast']}',\
+    @dbh.do("insert into hanabi values(
+      '#{req.query['id']}',
+      '#{req.query['cast']}',
       '#{req.query['role']}'
     );")
     @dbh.disconnect
@@ -94,14 +91,15 @@ server.mount_proc('/search') { |req, res|
     req.query[name] == ''
   }
 
-  unless search_title.empty?
-    search_title.map! { |name| "#{name}='#{req.query[name]}'" }
+  if search_title.empty?
+    where_data = " "
+  else
+    search_title.map! {|name| "#{name}='#{req.query[name]}'"}
     where_data = "where " + search_title.join(' or ')
+
 
     template = ERB.new( File.read('searched.erb'))
     res.body << template.result(binding)
-  else
-    where_data = ""
   end
 }
 

@@ -43,8 +43,8 @@
           <tr>
             <% row.each_with_name do |value, name| %>
               <% if name == 'id' %>
-                <td class="data-list__item"><input type="radio" name="operation" value=""<%="#{value}.delete" %>></td>
-                <td class="data-list__item"><input type="radio" name="operation" value=""<%="#{value}.edit" %>></td>
+                <td class="data-list__item"><input type="radio" name="operation" value=<%="#{value}.delete" %>></td>
+                <td class="data-list__item"><input type="radio" name="operation" value=<%="#{value}.edit" %>></td>
               <% end %>
               <td class="data-list__item"><%="#{value.to_s}" %></td>
             <% end %>
