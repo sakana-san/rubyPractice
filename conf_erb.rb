@@ -15,93 +15,133 @@ class String
     end
   end
 end
+
 config = {
   :Port => 8088,
   :DocumentRoot => '.',
 }
-# erbを呼び出してerbHandlerと関連付ける
+
+# 拡張子erbのファイルをERBを呼び出して処理するERBHandlerと関連付ける
 WEBrick::HTTPServlet::FileHandler.add_handler("erb", WEBrick::HTTPServlet::ERBHandler)
+
 # WEBrickのHTTP Serverクラスのサーバーインスタンスを作成する
-server = WEBrick::HTTPServer.new(config)
+server = WEBrick::HTTPServer.new( config )
+
 # erbのMIMEタイプを設定
-server.config[:MimeTypes]["erb"] = " text/html"
+server.config[:MimeTypes]["erb"] = "text/html"
 
-server.mount_proc("/init") { |req, res|
+# 一覧表示からの処理
+# "http://localhost:8088/list" で呼び出される
+server.mount_proc("/list") { |req, res|
   p req.query
-  # @dbhを作成し、hanabi.dbに接続する
-  @dbh = DBI.connect('DBI:SQLite3:hanabi.db')
-
-  @dbh.do("drop table if exists hanabi")
-  @dbh.do("create table hanabi(
-    id       varchar(50)  not null,
-    cast     varchar(100)  not null,
-    role     varchar(100)  not null,
-    primary  key(id)
-  );")
-
-  # 処理の結果を表示する
-  template = ERB.new(File.read('inited.erb'))
-  res.body << template.result( binding )
-}
-
-server.mount_proc('/list') { |req, res|
-
+  # 'operation'の値の後の（.delete, .edit）で処理を分岐する
   if /(.*)\.(delete|edit)$/ =~ req.query['operation']
-    p req.query
     target_id = $1
     operation = $2
-
+    # 選択された処理を実行する画面に移行する
+    # ERBを、ERBHandlerを経由せずに直接呼び出して利用している
     template = ERB.new(File.read('delete.erb')) if operation == 'delete'
     template = ERB.new(File.read('edit.erb')) if operation == 'edit'
     res.body << template.result(binding)
-  else
-    template = ERB.new(File.read('no_selected.erb'))
+  else #データが選択されていないなど
+    template = ERB.new( File.read('no_selected.erb') )
     res.body << template.result(binding)
   end
 }
 
-server.mount_proc('/entry') { |req, res|
+# 登録からの処理
+# "http://localhost:8088/entry" で呼び出される
+server.mount_proc("/entry") { |req, res|
+  p req.query
+  # @dbhを作成し、toinDarta.dbに接続する
+  @dbh = DBI.connect('DBI:SQLite3:hanabi.db')
+  # idが使われていたら登録できない
+  rows = @dbh.select_one("select * from hanabi where id='#{req.query['id']}';")
+  if rows
+    # データーベースとの接続終了
+    @dbh.disconnect
+    # 処理の結果を表示する
+    template = ERB.new(File.read('no_entried.erb'))
+    res.body << template.result( binding )
+  else
+    # テーブルにデータを追加する
+    @dbh.do("insert into hanabi \
+      values(
+        '#{req.query['id']}',
+        '#{req.query['cast']}',
+        '#{req.query['role']}',
+      );
+    ")
+    @dbh.disconnect
+
+    # 処理の結果を表示する
+    template = ERB.new(File.read('entried.erb'))
+    res.body << template.result( binding )
+  end
+}
+
+# 検索の処理
+# "http://localhost:8088/entry" で呼び出される
+server.mount_proc("/search") { |req, res|
   p req.query
 
-  @dbh = DBI.connect ('DBI:SQLite3:hanabi.db')
-  @rows = @dbh.select_one("select * from hanabi where id='#{req.query['id']}';")
+  # 検索条件の処理
+  condition = ['id', 'cast', 'role']
+  # 問い合わせ以外の条件を削除
+  condition.delete_if { |name| req.query[name] == ''}
 
-  unless @rows
-    @dbh.do("insert into hanabi values(
-      '#{req.query['id']}',
-      '#{req.query['cast']}',
-      '#{req.query['role']}'
-    );")
-    @dbh.disconnect
-    template = ERB.new( File.read('entried.erb'))
-    res.body << template.result(binding)
+  if condition.empty?
+    where_data = ''
   else
-    @dbh.disconnect
-    template = ERB.new( File.read('no_entried.erb'))
-    res.body << template.result(binding)
+    condition.map! { |name| "#{name}='#{req.query[name]}'"}
+    # 要素があるときは、where句に直す
+    #（現状、項目ごとの完全一致のorだけ）
+    where_data = "where " + condition.join(' or ')
   end
+
+  # 処理の結果を表示する
+  # ERBを、ERBHandlerを経由せずに直接呼び出して利用している
+  template = ERB.new( File.read('searched.erb') )
+  res.body << template.result( binding )
 }
+# # 修正の処理
+# # "http://localhost:8088/entry" で呼び出される
+# server.mount_proc("/edit") { |req, res|
+#   p req.query
+#   # dbhを作成し、データベース'hanabi.db'に接続する
+#   @dbh = DBI.connect('DBI:SQlite3:hanabi.db')
+#   @dbh.do("update hanabi set \
+#     cast='#{req.query['cast']}',\
+#     role='#{req.query['position']}',\
+#     grade ='#{req.query['grade']}'
+#     where id='#{req.query['id']}';
+#   ")
+#   # データーベースとの接続を終了する
+#   @dbh.disconnect
+#   #処理を表示する
+#   # ERBを、ERBHandlerを軽種せずに直接呼び出して利用している
+#   template = ERB.new( File.read('edited.erb'))
+#   res.body << template.result(binding)
+# }
+#
+# # 削除の処理
+# # "http://localhost:8099/delete" で呼び出される
+# server.mount_proc("/delete") { |req, res|
+#   p req.query
+#   # dbhを作成し、データベース'hanabi.db'に接続する
+#   @dbh = DBI.connect('DBI:SQlite3:hanabi.db')
+#   # テーブルからデータを削除する
+#   @dbh.do("delete from hanabi where id='#{req.query['id']}';")
+#   # データベースの接続を終了する
+#   @dbh.disconnect
+#
+#   # 処理の結果を表示する
+#   # ERBを、ERBHandlerを経由せずに直接呼び出して利用している
+#   template = ERB.new( File.read('deleted.erb') )
+#   res.body << template.result(binding)
+#
+# }
 
-server.mount_proc('/search') { |req, res|
-  p req.query
-
-  search_title = ['id', 'cast', 'role']
-
-  search_title.delete_if { |name|
-    req.query[name] == ''
-  }
-
-  if search_title.empty?
-    where_data = " "
-  else
-    search_title.map! {|name| "#{name}='#{req.query[name]}'"}
-    where_data = "where " + search_title.join(' or ')
-
-
-    template = ERB.new( File.read('searched.erb'))
-    res.body << template.result(binding)
-  end
-}
 
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく
 trap(:INT) do
