@@ -1,0 +1,67 @@
+<%# -*- coding: utf-8 -*-%>
+<% require 'dbi' %>
+<% # dbhを作成し、データベースに接続する %>
+<% @dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
+<% # テーブルからデータを読み込で結果を取得 %>
+<% @sth = @dbh.execute("select * from hanabi;") %>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>データの表示</title>
+  <link rel="stylesheet" href="./dist/css/common.css" type="text/css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
+<body>
+<header class="header is-fixed js-header-position">
+  <p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
+</header>
+<div class="player-manage">
+  <div class="player-manage__heading">
+    <h1 class="player-manage__title">打ち上げ花火下から見るか、横から見るか</h1>
+    <p class="player-manage__processing">処理するデータを選択してください</p>
+  </div>
+  <ul class="menu-horizon">
+    <li class="menu-horizon__item"><a href="entry.erb">キャストの登録</a></li>
+    <li class="menu-horizon__item"><a href="search.erb">キャストの検索</a></li>
+    <li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
+  </ul>
+  <form method="post" action="list">
+    <table class="data-list">
+      <thead>
+        <tr>
+          <th class="data-list__title">削除</th>
+          <th class="data-list__title">修正</th>
+          <% @sth.column_names.each do |name| %>
+            <th class="data-list__title"><%= name %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sth.each do |row| %>
+          <tr>
+            <% row.each_with_name do |value, name| %>
+              <% if name == 'id' %>
+                <td class="data-list__item"><input type="radio" name="operation" value=<%="#{value}.delete" %>></td>
+                <td class="data-list__item"><input type="radio" name="operation" value=<%="#{value}.edit" %>></td>
+              <% end %>
+              <td class="data-list__item"><%="#{value.to_s}" %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <input type="submit" class="c-action-button" value="実行">
+  </form>
+</div>
+<footer class="footer">
+  <p class="footer__text">ここはフッターコンテントです</p>
+</footer>
+<script src="./dist/js/vendor.js"></script>
+<script src="./dist/js/app.js"></script>
+</body>
+</html>
+
+<% @sth.finish %>
+<% @dbh.disconnect %>

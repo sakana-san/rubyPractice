@@ -1,0 +1,29 @@
+.player-manage
+  +width
+  margin: 80px auto 0
+  padding: 20px
+  border: solid 2px #e0e0e0
+  box-sizing: border-box
+  &__heading
+    margin-bottom: 10px
+    padding-left: 8px
+    padding-bottom: 4px
+    border-left: solid 1px #00BBDD
+  &__title
+    font-size: 20px
+  &__processing
+    font-size: 11px
+    color: #999
+  &__error
+    font-size: 11px
+    color: #ff0000
+  &__text
+    font-size: 14px
+    font-weight: bold
+    color: #4a4a4a
+  &--init
+    @extend .player-manage
+    .menu-horizon__item > a
+      margin: 0 0 30px
+    .player-manage__text
+      margin-bottom: 30px
