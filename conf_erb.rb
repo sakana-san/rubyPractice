@@ -96,11 +96,10 @@ server.mount_proc('/search') { |req, res|
   else
     search_title.map! {|name| "#{name}='#{req.query[name]}'"}
     where_data = "where " + search_title.join(' or ')
-
-
-    template = ERB.new( File.read('searched.erb'))
-    res.body << template.result(binding)
   end
+  # if文の中に入れるとnear=syntax errorが表示される
+  template = ERB.new( File.read('searched.erb'))
+  res.body << template.result(binding)
 }
 
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく
