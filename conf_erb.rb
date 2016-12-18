@@ -30,6 +30,26 @@ server = WEBrick::HTTPServer.new( config )
 # erbのMIMEタイプを設定
 server.config[:MimeTypes]["erb"] = "text/html"
 
+
+server.mount_proc("/init") { |req, res|
+  p req.query
+  # @dbhを作成し、toinDarta.dbに接続する
+  @dbh = DBI.connect('DBI:SQLite3:toinData.db')
+
+  @dbh.do("drop table if exists toinData")
+  @dbh.do("create table toinData(
+    id        varchar(50)  not null,
+    name      varchar(100) not null,
+    position  varchar(100) not null,
+    grade     varchar(50)  not null,
+    primary   key(id)
+  );")
+
+  # 処理の結果を表示する
+  template = ERB.new(File.read('inited.erb'))
+  res.body << template.result( binding )
+}
+
 # 一覧表示からの処理
 # "http://localhost:8088/list" で呼び出される
 server.mount_proc("/list") { |req, res|
