@@ -10,7 +10,6 @@ var config = {
 		'common': [
 			'./src/js/common/accordion.js',
 			'./src/js/common/headerTracking.js',
-			'./src/js/common/rating.js',
 		],
 		'sub': [
 			'./src/js/sub/objectInstance.js'
