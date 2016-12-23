@@ -68,7 +68,7 @@ class OsakaToinPlayer
   def list
     counts = 0
     #テーブルの項目を日本語に変えるハッシュ
-    @item = {id: 'キー', name: '名前', position: '年齢'}
+    @item = {id: 'キー', name: '名前', position: 'ポジション', grade: '学年'}
     puts "\n データの表示"
 
     #テーブルからデータを読み込んで表示
