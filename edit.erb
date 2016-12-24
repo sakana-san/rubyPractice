@@ -28,22 +28,22 @@
 	</ul>
 	<form method="post" action="edit">
 		<input type="hidden" name="id" value="<%= target_id %>">
-		<table  class="data-list">
+		<table  class="cast-data">
 			<% @sth.each do |row| %>
 				<thead>
 					<tr>
-						<th class="data-list__title">項目名</th>
-						<th class="data-list__title">入力データ</th>
+						<th class="cast-data__title">項目名</th>
+						<th class="cast-data__title">入力データ</th>
 					</tr>
 				</thead>
 				<tbody>
 					<% ['id', 'name', 'position', 'grade'].each do |name| %>
 						<tr>
-							<td class="data-list__item"><%= name %></td>
+							<td class="cast-data__item"><%= name %></td>
 							<% if name == 'id' %>
-									<td class="data-list__item"><%= row[name] %></td>
+									<td class="cast-data__item"><%= row[name] %></td>
 							<% else %>
-									<td class="data-list__item"><input name="<%= name %>" value="<%= row[name] %>" size="60" /></td>
+									<td class="cast-data__item"><input name="<%= name %>" value="<%= row[name] %>" size="60" /></td>
 							<% end %>
 						</tr>
 					<% end %>

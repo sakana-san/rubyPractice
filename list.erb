@@ -28,13 +28,13 @@
 		<li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
 	</ul>
 	<form method="post" action="list">
-		<table  class="data-list">
+		<table  class="cast-data">
 			<thead>
 				<tr>
-					<th class="data-list__header-delete">削除</th>
-					<th class="data-list__header-modify">修正</th>
+					<th class="cast-data__header-delete">削除</th>
+					<th class="cast-data__header-modify">修正</th>
 					<% @sth.column_names.each do |name| %>
-						<th class="data-list__header-label"><%= name %></th>
+						<th class="cast-data__header-label"><%= name %></th>
 					<% end %>
 				</tr>
 			</thead>
@@ -43,10 +43,10 @@
 					<tr>
 						<% row.each_with_name do |value, name| %>
 							<% if name == 'id' %>
-								<td class="data-list__cell"><input type="radio" name="operation" value= <%= "#{value}.delete" %>></td>
-								<td class="data-list__cell"><input type="radio" name="operation" value= <%= "#{value}.edit" %>></td>
+								<td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{value}.delete" %>></td>
+								<td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{value}.edit" %>></td>
 							<% end %>
-							<td class="data-list__cell"><%= "#{value.to_s}" %></td>
+							<td class="cast-data__cell"><%= "#{value.to_s}" %></td>
 						<% end %>
 					</tr>
 			<% end %>

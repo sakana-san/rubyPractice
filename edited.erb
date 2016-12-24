@@ -21,18 +21,18 @@
 		<li class="c-menu-list__item"><a href="list.erb">選手データの表示</a></li>
 		<li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
 	</ul>
-	<table  class="data-list">
+	<table  class="cast-data">
 		<thead>
 			<tr>
-				<th class="data-list__title">項目名</th>
-				<th class="data-list__title">入力データ</th>
+				<th class="cast-data__title">項目名</th>
+				<th class="cast-data__title">入力データ</th>
 			</tr>
 		</thead>
 		<tbody>
 			<% ['id','name','position','grade'].each do |name| %>
 				<tr>
-					<td class="data-list__item"><%= name %></td>
-					<td class="data-list__item"><%= req.query[name] %></td>
+					<td class="cast-data__item"><%= name %></td>
+					<td class="cast-data__item"><%= req.query[name] %></td>
 				</tr>
 			<% end %>
 		</tbody>

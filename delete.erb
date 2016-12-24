@@ -29,19 +29,19 @@
 	<%# 削除データを表示する。アクションはdelete %>
 	<form method="post" action="delete">
 		<input type="hidden" name="id" value="<%= target_id %>">
-		<table  class="data-list">
+		<table  class="cast-data">
 			<thead>
 				<tr>
-					<th class="data-list__title">項目名</th>
-					<th class="data-list__title">削除データ</th>
+					<th class="cast-data__title">項目名</th>
+					<th class="cast-data__title">削除データ</th>
 				</tr>
 			</thead>
 			<tbody>
 				<%# each_width_nameメソッドで値と項目名を1件分ずつ取り出して表示する %>
 				<% row.each_with_name do |val, name| %>
 						<tr>
-							<td class="data-list__item"><%= name %></td>
-							<td class="data-list__item"><%= val.to_s %></td>
+							<td class="cast-data__item"><%= name %></td>
+							<td class="cast-data__item"><%= val.to_s %></td>
 							<input type="hidden" name="<%= name %>" value="<%= val %>">
 						</tr>
 				<% end %>

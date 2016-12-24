@@ -22,18 +22,18 @@
 		<li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
 	</ul>
 	<form method="post" action="search">
-		<table  class="data-list">
+		<table  class="cast-data">
 			<thead>
 				<tr>
-					<th class="data-list__header-label">項目名</th>
-					<th class="data-list__header-label">入力データ</th>
+					<th class="cast-data__header-label">項目名</th>
+					<th class="cast-data__header-label">入力データ</th>
 				</tr>
 			</thead>
 			<tbody>
 				<% ['id', 'name', 'position', 'grade'].each do |name| %>
 					<tr>
-						<td class="data-list__item--subject"><%= name %></td>
-						<td class="data-list__item"><input type="text" name="<%= name %>"></td>
+						<td class="cast-data__item--subject"><%= name %></td>
+						<td class="cast-data__item"><input type="text" name="<%= name %>"></td>
 					</tr>
 				<% end %>
 			</tbody>
