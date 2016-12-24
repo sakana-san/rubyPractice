@@ -67,18 +67,18 @@ class OsakaToinPlayer
   end
   def list
     counts = 0
-    #テーブルの項目を日本語に変えるハッシュ
-    @item = {id: 'キー', name: '名前', position: 'ポジション', grade: '学年'}
+    # テーブルの項目を日本語に変えるハッシュ。シンボルだと上手く変換できないので、文字列のhashを使用している。
+    # 参考URL: http://qiita.com/QUANON/items/169c73425a6bc50dee51
+    @item = {'id' => 'キー', 'name' => '名前', 'position' => 'ポジション', 'grade' => '学年'}
     puts "\n データの表示"
-
     #テーブルからデータを読み込んで表示
     sth = @dbh.execute("select * from toinData")
     #rowに1件分の情報が入ってる
     sth.each do |row|
       puts "\n-----------------------------"
       #rowに1件分の情報があるので、そこからeach_with_nameメソッドで値と項目名を取り出す
-      row.each_with_name do |value, name|
-        print "#{@item[name]} #{value.to_s}"
+      row.each_with_name do |value, index|
+        print "#{@item[index]}: #{value.to_s}\n"
       end
       puts "\n-----------------------------"
       counts += 1
