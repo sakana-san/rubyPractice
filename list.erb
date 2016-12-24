@@ -17,24 +17,24 @@
 <header class="header">
 	<p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
 </header>
-<div class="player-manage">
-	<div class="player-manage__title">
-		<h1>選手の管理システム</h1>
-		<p>処理するデータを選択してください</p>
+<div class="cast-management">
+	<div class="cast-management__label">
+		<h1 class="cast-management__heading">打ち上げ花火下から見るか、横から見るかキャスト管理</h1>
+		<p class="cast-management__description">処理するデータを選択してください</p>
 	</div>
-	<ul class="menu-horizon">
-		<li class="menu-horizon__item"><a href="entry.erb">選手データの登録</a></li>
-		<li class="menu-horizon__item"><a href="search.erb">選手データの検索</a></li>
-		<li class="menu-horizon__item"><a href="./">メニューに戻る</a></li>
+	<ul class="c-menu-list--related">
+		<li class="c-menu-list__item"><a href="entry.erb">選手データの登録</a></li>
+		<li class="c-menu-list__item"><a href="search.erb">選手データの検索</a></li>
+		<li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
 	</ul>
 	<form method="post" action="list">
 		<table  class="data-list">
 			<thead>
 				<tr>
-					<th class="data-list__title">削除</th>
-					<th class="data-list__title">修正</th>
+					<th class="data-list__header-delete">削除</th>
+					<th class="data-list__header-modify">修正</th>
 					<% @sth.column_names.each do |name| %>
-						<th class="data-list__title"><%= name %></th>
+						<th class="data-list__header-label"><%= name %></th>
 					<% end %>
 				</tr>
 			</thead>
@@ -43,10 +43,10 @@
 					<tr>
 						<% row.each_with_name do |value, name| %>
 							<% if name == 'id' %>
-								<td class="data-list__item"><input type="radio" name="operation" value= <%= "#{value}.delete" %>></td>
-								<td class="data-list__item"><input type="radio" name="operation" value= <%= "#{value}.edit" %>></td>
+								<td class="data-list__cell"><input type="radio" name="operation" value= <%= "#{value}.delete" %>></td>
+								<td class="data-list__cell"><input type="radio" name="operation" value= <%= "#{value}.edit" %>></td>
 							<% end %>
-							<td class="data-list__item"><%= "#{value.to_s}" %></td>
+							<td class="data-list__cell"><%= "#{value.to_s}" %></td>
 						<% end %>
 					</tr>
 			<% end %>
