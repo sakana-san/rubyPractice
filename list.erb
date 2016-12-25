@@ -31,10 +31,10 @@
     <table class="cast-data">
       <thead>
       <tr>
-        <th class="cast-data__header-delete">削除</th>
-        <th class="cast-data__header-modify">修正</th>
+        <th class="cast-data__header--delete">削除</th>
+        <th class="cast-data__header--modify">修正</th>
         <% @sth.column_names.each do |name| %>
-          <th class="cast-data__header-label"><%= name %></th>
+          <th class="cast-data__header--<%= name %>"><%= name %></th>
         <% end %>
       </tr>
       </thead>
