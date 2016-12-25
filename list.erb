@@ -1,9 +1,9 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
 <% # dbhを作成し、データベースに接続する %>
-<% @dbh = DBI.connect('DBI:SQLite3:toinTest.db') %>
+<% @dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
 <% # テーブルからデータを読み込で結果を取得 %>
-<% @sth = @dbh.select_all("select * from toinTest;") %>
+<% @sth = @dbh.execute("select * from hanabi;") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -39,7 +39,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @rows.each do |row| %>
+        <% @sth.each do |row| %>
           <tr>
             <% row.each_with_name do |value, name| %>
               <% if name == 'id' %>

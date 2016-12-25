@@ -1,9 +1,9 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
 <% # dbhを作成し、データベースに接続する %>
-<% dbh = DBI.connect('DBI:SQLite3:toinTest.db') %>
+<% dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
 <% # 該当するレコードを配列に収集する %>
-<% @rows = dbh.select_all("select * from toinTest #{where_data};") %>
+<% @rows = dbh.select_all("select * from hanabi #{where_data};") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -25,7 +25,8 @@
   <% unless @rows.size > 0 %>
       <p class="cast-management__error">該当データがありません<br>検索条件を見直してください</p>
       <ul class="c-menu-list--related">
-        <li class="c-menu-list__item"><a href="list.erb">選手データの表示</a></li>
+        <li class="c-menu-list__item"><a href="list.erb">選手データの検索</a></li>
+        <li class="c-menu-list__item"><a href="search.erb">選手データの検索</a></li>
         <li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
       </ul>
   <% else %>
@@ -39,15 +40,15 @@
           <tr>
             <th class="cast-data__header-delete">削除</th>
             <th class="cast-data__header-modify">修正</th>
-            <% ['id', 'cast', 'desc' ].each do |name| %>
+            <% ['id', 'actor', 'character' ].each do |name| %>
                 <th class="cast-data__header-label"><%= name %></th>
             <% end %>
           </tr>
           </thead>
           <tbody>
-          <% dbh.select_all("select * from toinTest #{where_data};") do |row| %>
+          <% dbh.select_all("select * from hanabi #{where_data};") do |row| %>
               <tr>
-                <% ['id', 'cast', 'desc' ].each do |name| %>
+                <% ['id', 'actor', 'character' ].each do |name| %>
                     <% if name == 'id' %>
                         <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.delete" %>></td>
                         <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.edit" %>></td>
