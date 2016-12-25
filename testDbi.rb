@@ -2,19 +2,18 @@
 require 'date'
 require 'dbi'
 
-class OsakaToin
-  def initialize(name, position, grade)
-    @name = name
-    @position = position
-    @grade = grade
+class Hanabi
+  def initialize(actor, character)
+    @actor = actor
+    @character = character
   end
-  attr_accessor :name, :position, :grade
+  attr_accessor :actor, :character
   def to_s
-    "#{@name}, #{@position}, #{@grade}"
+    "#{@actor}, #{@character}"
   end
 end
 
-class OsakaToinPlayer
+class HanabiCasting
   def initialize(sqlite)
     @db = sqlite
     @dbh = DBI.connect("DBI:SQLite3:#{@db}")
@@ -26,19 +25,18 @@ class OsakaToinPlayer
 
     answer = gets.chomp.upcase
     if /^Y$/ =~ answer
-      @dbh.do("drop table if exists toinData")
-      @dbh.do("create table toinData(
-        id        varchar(50)  not null,
-        name      varchar(100) not null,
-        position  varchar(100) not null,
-        grade     varchar(50)  not null,
-        primary   key(id)
+      @dbh.do("drop table if exists hanabi")
+      @dbh.do("create table hanabi(
+        id         varchar(50)  not null,
+        actor      varchar(100) not null,
+        character  varchar(100) not null,
+        primary    key(id)
       );")
       puts "\n初期化しました"
     end
   end
-  def set
-    osakaToin = OsakaToin.new(" ", " ", " ")
+  def add
+    hanabi = Hanabi.new(" ", " ")
     print "\n 1.データの登録"
     print "データを登録します"
 
@@ -47,18 +45,15 @@ class OsakaToinPlayer
     key = gets.chomp
 
     print "名前:"
-    osakaToin.name = gets.chomp
-    print "ポジション:"
-    osakaToin.position = gets.chomp
-    print "学年:"
-    osakaToin.grade = gets.chomp
+    hanabi.actor = gets.chomp
+    print "どんな役:"
+    hanabi.character = gets.chomp
 
-    if osakaToin.name != '' && osakaToin.position != '' && osakaToin.grade != ''
-      @dbh.do("insert into toinData values(
+    if hanabi.actor != '' && hanabi.character != ''
+      @dbh.do("insert into hanabi values(
         \'#{key}\',
-        \'#{osakaToin.name}\',
-        \'#{osakaToin.position}\',
-        \'#{osakaToin.grade}\'
+        \'#{hanabi.actor}\',
+        \'#{hanabi.character}\'
       )")
       puts "入力しました"
     else
@@ -69,14 +64,14 @@ class OsakaToinPlayer
     counts = 0
     # テーブルの項目を日本語に変えるハッシュ。シンボルだと上手く変換できないので、文字列のhashを使用している。
     # 参考URL: http://qiita.com/QUANON/items/169c73425a6bc50dee51
-    @item = {'id' => 'キー', 'name' => '名前', 'position' => 'ポジション', 'grade' => '学年'}
+    @item = {'id' => 'キー', 'actor' => '名前', 'character' => 'どんな役'}
     puts "\n データの表示"
     #テーブルからデータを読み込んで表示
-    sth = @dbh.execute("select * from toinData")
+    sth = @dbh.execute("select * from hanabi")
     #rowに1件分の情報が入ってる
     sth.each do |row|
       puts "\n-----------------------------"
-      #rowに1件分の情報があるので、そこからeach_with_nameメソッドで値と項目名を取り出す
+      #rowに1件分の情報があるので、そこからeach_with_actorメソッドで値と項目名を取り出す
       row.each_with_name do |value, index|
         print "#{@item[index]}: #{value.to_s}\n"
       end
@@ -93,26 +88,23 @@ class OsakaToinPlayer
     print "\n3. データの修正"
     print "データを修正します"
 
-    osakaToin = OsakaToin.new(" ", " ", " ")
+    hanabi = Hanabi.new(" ", " ")
     print "\n"
 
     print "キー:"
     key = gets.chomp
 
     print "名前:"
-    osakaToin.name = gets.chomp
-    print "ポジション:"
-    osakaToin.position = gets.chomp
-    print "学年:"
-    osakaToin.grade = gets.chomp
+    hanabi.actor = gets.chomp
+    print "どんな役:"
+    hanabi.character = gets.chomp
 
-    if osakaToin.name != '' && osakaToin.position != '' && osakaToin.grade != ''
+    if hanabi.actor != '' && hanabi.character != ''
       # レコードのデータを修正する
-      @dbh.do("update toinData
+      @dbh.do("update hanabi
         set id = \'#{key}\',
-            name = \'#{osakaToin.name}\',
-            position = \'#{osakaToin.position}\',
-            grade = \'#{osakaToin.grade}\'
+            actor = \'#{hanabi.actor}\',
+            character = \'#{hanabi.character}\'
       where id = \'#{key}\';
       ")
       puts "\n修正しますた"
@@ -130,7 +122,7 @@ class OsakaToinPlayer
     answer = gets.chomp.upcase
     if /^Y$/ =~ answer
       # keyと照合して合致すればそのレコードを削除する
-      @dbh.do("delete from toinData where id = \'#{key}\';")
+      @dbh.do("delete from hanabi where id = \'#{key}\';")
       puts "\n削除しますた"
     end
   end
@@ -149,7 +141,7 @@ class OsakaToinPlayer
         when "0" == num
           init
         when "1" == num
-          set
+          add
         when "2" == num
           list
         when "3" == num
@@ -165,6 +157,6 @@ class OsakaToinPlayer
 end
 
 
-osakaToinPlayer = OsakaToinPlayer.new('toinData.db')
+hanabiCasting = HanabiCasting.new('hanabi.db')
 
-puts osakaToinPlayer.run
+puts hanabiCasting.run
