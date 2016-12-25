@@ -32,7 +32,7 @@
       </tr>
       </thead>
       <tbody>
-      <% ['id', 'name', 'position'].each do |name| %>
+      <% ['id', 'aidayo', 'desc' ].each do |name| %>
         <tr>
           <td class="cast-data__cell--subject"><%= name %></td>
           <td class="cast-data__cell"><%= req.query[name] %></td>
