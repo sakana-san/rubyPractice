@@ -1,0 +1,74 @@
+<%# -*- coding: utf-8 -*-%>
+<% require 'dbi' %>
+<% # dbhを作成し、データベースに接続する %>
+<% dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
+<% # 該当するレコードを配列に収集する %>
+<% @rows = dbh.select_all("select * from hanabi #{where_data};") %>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>データの表示</title>
+  <link rel="stylesheet" href="./dist/css/common.css" type="text/css" >
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
+<body>
+<header class="header">
+  <p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
+</header>
+<div class="cast-management">
+  <div class="cast-management__label">
+    <h1 class="cast-management__heading">選手データの検索</h1>
+    <p class="cast-management__description">処理するデータを選択してください</p>
+  </div>
+  <% unless @rows.size > 0 %>
+    <p class="cast-management__error">該当データがありません<br>検索条件を見直してください</p>
+    <ul class="c-menu-list--related">
+      <li class="c-menu-list__item"><a href="list.erb">選手データの検索</a></li>
+      <li class="c-menu-list__item"><a href="search.erb">選手データの検索</a></li>
+      <li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
+    </ul>
+  <% else %>
+    <ul class="c-menu-list--related">
+      <li class="c-menu-list__item"><a href="list.erb">選手データの表示</a></li>
+      <li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
+    </ul>
+    <form method="post" action="list">
+      <table  class="cast-data">
+        <thead>
+          <tr>
+            <th class="cast-data__header-delete">削除</th>
+            <th class="cast-data__header-modify">修正</th>
+            <% ['id', 'actor', 'character' ].each do |name| %>
+                <th class="cast-data__header-label"><%= name %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+        <% dbh.select_all("select * from hanabi #{where_data};") do |row| %>
+          <tr>
+            <% ['id', 'actor', 'character' ].each do |name| %>
+              <% if name == 'id' %>
+                <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.delete" %>></td>
+                <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.edit" %>></td>
+              <% end %>
+              <td class="cast-data__cell"><%= "#{row[name].to_s}" %></td>
+            <% end %>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+      <input type="submit" class="c-action-button" value="実行">
+    </form>
+  <% end %>
+</div>
+<footer class="footer">
+  <p class="footer__text">ここはフッターコンテントです</p>
+</footer>
+<script src="./dist/js/vendor.js"></script>
+<script src="./dist/js/app.js"></script>
+</body>
+</html>
+
+<% dbh.disconnect %>

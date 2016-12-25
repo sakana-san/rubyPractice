@@ -1,9 +1,5 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
-<% # dbhを作成し、データベースに接続する %>
-<% dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
-<% # テーブルからデータを読み込で結果を取得 %>
-<% @sth = dbh.execute("select * from hanabi") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -36,7 +32,7 @@
       </tr>
       </thead>
       <tbody>
-      <% ['id', 'cast', 'desc'].each do |name| %>
+      <% ['id', 'actor', 'character' ].each do |name| %>
         <tr>
           <td class="cast-data__cell--subject"><%= name %></td>
           <td class="cast-data__cell"><%= req.query[name] %></td>
@@ -53,6 +49,3 @@
 <script src="./dist/js/app.js"></script>
 </body>
 </html>
-
-<% @sth.finish %>
-<% dbh.disconnect %>
