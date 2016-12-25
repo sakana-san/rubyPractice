@@ -65,7 +65,7 @@ server.mount_proc("/entry") { |req, res|
   # dbhを作成する
   @dbh = DBI.connect("DBI:SQLite3:hanabi.db")
 
-  #idが使われていたらとろくさせない
+  #idが使われていたら登録させない
   @rows = @dbh.select_one("select * from hanabi where id = '#{req.query['id']}';")
 
   if @rows
