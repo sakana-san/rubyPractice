@@ -30,6 +30,32 @@ server = WEBrick::HTTPServer.new( config )
 # erbのMIMEタイプを設定
 server.config[:MimeTypes]["erb"] = "text/html"
 
+# -------------------------------------------------------------------------------------
+# ブランチが複雑なので一旦説明します
+
+# ●feature/ruby_production_application 選手データの完成品が入っている。今実装には関係ないのでいじらない
+# ●feature/ruby_production_application_dev 打ち上げ花火の完成品が入っている。基本的にはここをいじらない
+# ●feature/ruby_production_application_dev_mounting 練習用の何も入っていないdefaultのブランチ。ここにいろいろ入れていく
+# ●feature/ruby_production_application_dev_mounting_list listページを作るブランチ。作り終えたら、ruby_production_application_dev_mounting
+#  にmergeする
+
+# 基本的には1ページずつブランチを作って、feature/ruby_production_application_dev_mountingにmergeしていく
+# -------------------------------------------------------------------------------------
+
+# 一覧表示の処理(list.erb)
+server.mount_proc("/list") { |req, res|
+  p req.query
+  # 'operation'値の後の（.delete, .edit）で処理を分岐する
+  if /(.*)\.(delete|edit)$/ =~ req.query['operation']
+    template = ERB.new(File.read('delete.erb')) if operation == 'delete'
+    template = ERB.new(File.read('edit.erb')) if operation == 'edit'
+    res.body << template.result(binding)
+  else
+    #削除と修正が選択されなかった時ここに入ってくる
+    template = ERB.new(File.read('no_selected.erb'))
+    res.body << template.result(binding)
+  end
+}
 
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく
 trap(:INT) do
