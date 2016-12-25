@@ -20,40 +20,30 @@
 <div class="cast-management">
   <div class="cast-management__label">
     <h1 class="cast-management__heading">打ち上げ花火下から見るか、横から見るかキャスト管理</h1>
-    <p class="cast-management__description">処理するデータを選択してください</p>
+    <p class="cast-management__description">下記のデータを登録しました</p>
   </div>
   <ul class="c-menu-list--related">
-    <li class="c-menu-list__item"><a href="entry.erb">出演者の登録</a></li>
+    <li class="c-menu-list__item"><a href="list.erb">出演者の表示</a></li>
     <li class="c-menu-list__item"><a href="search.erb">出演者の検索</a></li>
     <li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
   </ul>
-  <form method="post" action="list">
+  <form method="post" action="entry">
     <table class="cast-data">
       <thead>
       <tr>
-        <th class="cast-data__header-delete">削除</th>
-        <th class="cast-data__header-modify">修正</th>
-        <% @sth.column_names.each do |name| %>
-          <th class="cast-data__header-label"><%= name %></th>
-        <% end %>
+        <th class="cast-data__header-label">項目名</th>
+        <th class="cast-data__header-label">入力データ</th>
       </tr>
       </thead>
       <tbody>
-      <% @sth.each do |row| %>
+      <% ['id', 'cast', 'desc'].each do |name| %>
         <tr>
-          <% row.each_with_name do |value, name| %>
-            <% if name == 'id' %>
-                <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{value}.delete" %>>
-                </td>
-                <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{value}.edit" %>></td>
-            <% end %>
-            <td class="cast-data__cell"><%= "#{value.to_s}" %></td>
-          <% end %>
+          <td class="cast-data__cell--subject"><%= name %></td>
+          <td class="cast-data__cell"><%= req.query[name] %></td>
         </tr>
       <% end %>
       </tbody>
     </table>
-    <input type="submit" class="c-action-button" value="削除か修正を実行する  ">
   </form>
 </div>
 <footer class="footer">

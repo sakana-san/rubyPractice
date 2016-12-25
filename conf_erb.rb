@@ -44,7 +44,7 @@ server.config[:MimeTypes]["erb"] = "text/html"
 
 # 一覧表示の処理(list.erb)
 server.mount_proc("/list") { |req, res|
-  p req.query
+  p "一覧の処理#{req.query}"
   # 'operation'値の後の（.delete, .edit）で処理を分岐する
   if /(.*)\.(delete|edit)$/ =~ req.query['operation']
     template = ERB.new(File.read('delete.erb')) if operation == 'delete'
@@ -53,6 +53,33 @@ server.mount_proc("/list") { |req, res|
   else
     #削除と修正が選択されなかった時ここに入ってくる
     template = ERB.new(File.read('no_selected.erb'))
+    res.body << template.result(binding)
+  end
+}
+
+# データ登録の処理(entry.erb)
+server.mount_proc("/entry") { |req, res|
+
+  p "データの登録#{req.query}"
+
+  # dbhを作成する
+  @dbh = DBI.connect("DBI:SQLite3:hanabi.db")
+
+  #idが使われていたらとろくさせない
+  @rows = @dbh.select_one("select * from hanabi where id = '#{req.query['id']}';")
+
+  if @rows
+    @dbh.disconnect
+    template = ERB.new(File.read('no_entried.erb'))
+    res.body << template.result(binding)
+  else
+    @dbh.do("insert into hanabi values(
+      '#{req.query['id']}',
+      '#{req.query['cast']}',
+      '#{req.query['desc']}'
+    );")
+    @dbh.disconnect
+    template = ERB.new(File.read('entried.erb'))
     res.body << template.result(binding)
   end
 }
