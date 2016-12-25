@@ -63,17 +63,17 @@ server.mount_proc("/entry") { |req, res|
   p "データの登録#{req.query}"
 
   # dbhを作成する
-  @dbh = DBI.connect("DBI:SQLite3:hanabi.db")
+  @dbh = DBI.connect("DBI:SQLite3:hanabiData.db")
 
   #idが使われていたら登録させない
-  @rows = @dbh.select_one("select * from hanabi where id = '#{req.query['id']}';")
+  @rows = @dbh.select_one("select * from hanabiData where id = '#{req.query['id']}';")
 
   if @rows
     @dbh.disconnect
     template = ERB.new(File.read('no_entried.erb'))
     res.body << template.result(binding)
   else
-    @dbh.do("insert into hanabi values(
+    @dbh.do("insert into hanabiData values(
       '#{req.query['id']}',
       '#{req.query['cast']}',
       '#{req.query['desc']}'

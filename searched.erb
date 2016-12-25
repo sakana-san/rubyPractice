@@ -1,9 +1,9 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
 <% # dbhを作成し、データベースに接続する %>
-<% dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
+<% dbh = DBI.connect('DBI:SQLite3:hanabiData.db') %>
 <% # 該当するレコードを配列に収集する %>
-<% @rows = dbh.select_all("select * from hanabi #{where_data};") %>
+<% @rows = dbh.select_all("select * from hanabiData #{where_data};") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -39,15 +39,15 @@
           <tr>
             <th class="cast-data__header-delete">削除</th>
             <th class="cast-data__header-modify">修正</th>
-            <% ['id', 'name', 'position', 'grade'].each do |name| %>
+            <% ['id', 'cast', 'desc' ].each do |name| %>
                 <th class="cast-data__header-label"><%= name %></th>
             <% end %>
           </tr>
           </thead>
           <tbody>
-          <% dbh.select_all("select * from toinData #{where_data};") do |row| %>
+          <% dbh.select_all("select * from hanabiData #{where_data};") do |row| %>
               <tr>
-                <% ['id', 'case', 'desc'].each do |name| %>
+                <% ['id', 'cast', 'desc'].each do |name| %>
                     <% if name == 'id' %>
                         <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.delete" %>></td>
                         <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.edit" %>></td>

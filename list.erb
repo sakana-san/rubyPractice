@@ -1,9 +1,9 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
 <% # dbhを作成し、データベースに接続する %>
-<% @dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
+<% @dbh = DBI.connect('DBI:SQLite3:hanabiData.db') %>
 <% # テーブルからデータを読み込で結果を取得 %>
-<% @rows = @dbh.select_all("select * from hanabi;") %>
+<% @sth = @dbh.select_all("select * from hanabiData;") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -33,7 +33,7 @@
         <tr>
           <th class="cast-data__header--delete">削除</th>
           <th class="cast-data__header--modify">修正</th>
-          <% @rows.column_names.each do |name| %>
+          <% @sth.column_names.each do |name| %>
             <th class="cast-data__header--<%= name %>"><%= name %></th>
           <% end %>
         </tr>
@@ -64,5 +64,5 @@
 </body>
 </html>
 
-<% @rows.finish %>
+<% @sth.finish %>
 <% @dbh.disconnect %>
