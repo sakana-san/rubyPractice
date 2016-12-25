@@ -63,17 +63,17 @@ server.mount_proc("/entry") { |req, res|
   p "データの登録#{req.query}"
 
   # dbhを作成する
-  @dbh = DBI.connect("DBI:SQLite3:hanabiData.db")
+  @dbh = DBI.connect("DBI:SQLite3:toinTest.db")
 
   #idが使われていたら登録させない
-  @rows = @dbh.select_one("select * from hanabiData where id = '#{req.query['id']}';")
+  @rows = @dbh.select_one("select * from toinTest where id = '#{req.query['id']}';")
 
   if @rows
     @dbh.disconnect
     template = ERB.new(File.read('no_entried.erb'))
     res.body << template.result(binding)
   else
-    @dbh.do("insert into hanabiData values(
+    @dbh.do("insert into toinTest values(
       '#{req.query['id']}',
       '#{req.query['cast']}',
       '#{req.query['desc']}'
@@ -89,7 +89,7 @@ server.mount_proc("/search") { |req, res|
 
   p "データの検索#{req.query}"
 
-  search_label = ['id', 'cast', 'desc']
+  search_label = ['id', 'name', 'position', 'grade']
   #条件以外を削除
   search_label.delete_if { |name| req.query[name] == ' '}
 

@@ -1,9 +1,9 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
 <% # dbhを作成し、データベースに接続する %>
-<% dbh = DBI.connect('DBI:SQLite3:hanabiData.db') %>
+<% dbh = DBI.connect('DBI:SQLite3:toinTest.db') %>
 <% # 該当するレコードを配列に収集する %>
-<% @rows = dbh.select_all("select * from hanabiData #{where_data};") %>
+<% @rows = dbh.select_all("select * from toinTest #{where_data};") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -45,9 +45,9 @@
           </tr>
           </thead>
           <tbody>
-          <% dbh.select_all("select * from hanabiData #{where_data};") do |row| %>
+          <% dbh.select_all("select * from toinTest #{where_data};") do |row| %>
               <tr>
-                <% ['id', 'cast', 'desc'].each do |name| %>
+                <% ['id', 'name', 'position', 'grade'].each do |name| %>
                     <% if name == 'id' %>
                         <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.delete" %>></td>
                         <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.edit" %>></td>

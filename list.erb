@@ -1,9 +1,9 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
 <% # dbhを作成し、データベースに接続する %>
-<% @dbh = DBI.connect('DBI:SQLite3:hanabiData.db') %>
+<% @dbh = DBI.connect('DBI:SQLite3:toinTest.db') %>
 <% # テーブルからデータを読み込で結果を取得 %>
-<% @sth = @dbh.select_all("select * from hanabiData;") %>
+<% @sth = @dbh.select_all("select * from toinTest;") %>
 
 <!DOCTYPE html>
 <html lang="ja">
