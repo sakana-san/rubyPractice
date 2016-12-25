@@ -89,7 +89,7 @@ server.mount_proc("/search") { |req, res|
 
   p "データの検索#{req.query}"
 
-  search_label = ['id', 'name', 'position', 'grade']
+  search_label = ['id', 'name', 'position']
   #条件以外を削除
   search_label.delete_if { |name| req.query[name] == ' '}
 

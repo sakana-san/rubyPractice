@@ -47,7 +47,7 @@
           <tbody>
           <% dbh.select_all("select * from toinTest #{where_data};") do |row| %>
               <tr>
-                <% ['id', 'name', 'position', 'grade'].each do |name| %>
+                <% ['id', 'name', 'position'].each do |name| %>
                     <% if name == 'id' %>
                         <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.delete" %>></td>
                         <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{row[name]}.edit" %>></td>
