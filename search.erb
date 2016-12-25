@@ -16,30 +16,30 @@
 <div class="cast-management">
   <div class="cast-management__label">
     <h1 class="cast-management__heading">打ち上げ花火下から見るか、横から見るかキャスト管理</h1>
-    <p class="cast-management__description">下記のデータを登録しました</p>
+    <p class="cast-management__description">検索条件を入力してください</p>
   </div>
   <ul class="c-menu-list--related">
     <li class="c-menu-list__item"><a href="list.erb">出演者の表示</a></li>
-    <li class="c-menu-list__item"><a href="search.erb">出演者の検索</a></li>
     <li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
   </ul>
-  <form method="post" action="entry">
+  <form method="post" action="search">
     <table class="cast-data">
       <thead>
       <tr>
-        <th class="cast-data__header-label">項目名</th>
-        <th class="cast-data__header-label">入力データ</th>
+        <th class="cast-data__header--subject">項目名</th>
+        <th class="cast-data__header--input">入力データ</th>
       </tr>
       </thead>
       <tbody>
       <% ['id', 'cast', 'desc'].each do |name| %>
         <tr>
           <td class="cast-data__cell--subject"><%= name %></td>
-          <td class="cast-data__cell"><%= req.query[name] %></td>
+          <td class="cast-data__cell"><input type="text" name="<%= name %>"></td>
         </tr>
       <% end %>
       </tbody>
     </table>
+    <input type="submit" class="c-action-button" value="検索を実行">
   </form>
 </div>
 <footer class="footer">

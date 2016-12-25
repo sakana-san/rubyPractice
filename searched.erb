@@ -3,7 +3,8 @@
 <% # dbhを作成し、データベースに接続する %>
 <% @dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
 <% # テーブルからデータを読み込で結果を取得 %>
-<% @rows = @dbh.select_all("select * from hanabi;") %>
+<% @sth = @dbh.execute("select * from hanabi;") %>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -30,27 +31,27 @@
   <form method="post" action="list">
     <table class="cast-data">
       <thead>
-        <tr>
-          <th class="cast-data__header--delete">削除</th>
-          <th class="cast-data__header--modify">修正</th>
-          <% @rows.column_names.each do |name| %>
+      <tr>
+        <th class="cast-data__header--delete">削除</th>
+        <th class="cast-data__header--modify">修正</th>
+        <% @sth.column_names.each do |name| %>
             <th class="cast-data__header--<%= name %>"><%= name %></th>
-          <% end %>
-        </tr>
+        <% end %>
+      </tr>
       </thead>
       <tbody>
-        <% @rows.each do |row| %>
+      <% @sth.each do |row| %>
           <tr>
             <% row.each_with_name do |value, name| %>
-              <% if name == 'id' %>
-                <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{value}.delete" %>>
-                </td>
-                <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{value}.edit" %>></td>
-              <% end %>
-              <td class="cast-data__cell"><%= "#{value.to_s}" %></td>
+                <% if name == 'id' %>
+                    <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{value}.delete" %>>
+                    </td>
+                    <td class="cast-data__cell"><input type="radio" name="operation" value= <%= "#{value}.edit" %>></td>
+                <% end %>
+                <td class="cast-data__cell"><%= "#{value.to_s}" %></td>
             <% end %>
           </tr>
-        <% end %>
+      <% end %>
       </tbody>
     </table>
     <input type="submit" class="c-action-button" value="選択した処理を実行する">
@@ -64,5 +65,7 @@
 </body>
 </html>
 
-<% @rows.finish %>
+
+
+<% @sth.finish %>
 <% @dbh.disconnect %>

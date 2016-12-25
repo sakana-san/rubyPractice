@@ -84,6 +84,28 @@ server.mount_proc("/entry") { |req, res|
   end
 }
 
+# データ登録の処理(search.erb)
+server.mount_proc("/search") { |req, res|
+
+  p "データの検索#{req.query}"
+
+  search_label = ['id', 'cast', 'desc']
+  #条件以外を削除
+  search_label.delete_if { |name| req.query[name] == ' '}
+
+  if search_label.empty?
+    where_data = ' '
+  else
+    #要素を検索条件文字列に変換
+    search_label.map! { |name|
+      "#{name}='#{req.query[name]}'"
+    }
+    where_data = "where " + search_label.join(' or ')
+  end
+  template = ERB.new(File.read('searched.erb'))
+  res.body << template.result(binding)
+}
+
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく
 trap(:INT) do
   server.shutdown
