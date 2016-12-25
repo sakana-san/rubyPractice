@@ -75,7 +75,7 @@ server.mount_proc("/entry") { |req, res|
   else
     @dbh.do("insert into toinTest values(
       '#{req.query['id']}',
-      '#{req.query['aidayo']}',
+      '#{req.query['cast']}',
       '#{req.query['desc']}'
     );")
     @dbh.disconnect
@@ -89,7 +89,7 @@ server.mount_proc("/search") { |req, res|
 
   p "データの検索#{req.query}"
 
-  search_label = ['id', 'aidayo', 'desc']
+  search_label = ['id', 'cast', 'desc']
   #条件以外を削除
   search_label.delete_if { |name| req.query[name] == ' '}
 
