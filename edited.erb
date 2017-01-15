@@ -1,5 +1,4 @@
 <%# -*- coding: utf-8 -*-%>
-<% require 'dbi' %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -25,15 +24,15 @@
   <table class="cast-data">
     <thead>
       <tr>
-        <th class="cast-data__header--delete">削除</th>
-        <th class="cast-data__header--modify">修正</th>
+        <th class="cast-data__header--delete">項目名</th>
+        <th class="cast-data__header--modify">入力データ</th>
       </tr>
     </thead>
     <tbody>
       <% ['id', 'actor', 'character'].each do |name| %>
         <tr>
           <td class="cast-data__cell"><%= name %></td>
-          <td class="cast-data__cell"><% req.query[name] %></td>
+          <td class="cast-data__cell"><%= req.query[name] %></td>
         </tr>
       <% end %>
     </tbody>
