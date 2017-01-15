@@ -1,10 +1,5 @@
-
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
-<% # dbhを作成し、データベースに接続する %>
-<% @dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
-<% # テーブルからデータを読み込で結果を取得 %>
-<% @sth = @dbh.execute("select * from hanabi where id=\'#{target_id}\'") %>
 
 <!DOCTYPE html>
 <html lang="ja">
