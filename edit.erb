@@ -1,0 +1,62 @@
+<%# -*- coding: utf-8 -*-%>
+<% require 'dbi' %>
+<% # dbhを作成し、データベースに接続する %>
+<% @dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
+<% # テーブルからデータを読み込で結果を取得 %>
+<% @sth = @dbh.execute("select * from hanabi where id=\'#{target_id}\'") %>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>データの修正</title>
+  <link rel="stylesheet" href="./dist/css/common.css" type="text/css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
+<body>
+<header class="header">
+  <p class="header__text"><a href="./">ここはヘッダーコンテントです</a></p>
+</header>
+<div class="cast-management">
+  <div class="cast-management__label">
+    <h1 class="cast-management__heading">打ち上げ花火下から見るか、横から見るかキャスト管理</h1>
+    <p class="cast-management__description">このデータを修正します</p>
+  </div>
+  <ul class="c-menu-list--related">
+    <li class="c-menu-list__item"><a href="list.erb">出演者の表示</a></li>
+    <li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
+  </ul>
+  <form method="post" action="edit">
+    <input type="hidden" name="id" value="<%= target_id %>">
+    <table class="cast-data">
+      <thead>
+        <tr>
+          <th class="cast-data__header--delete">削除</th>
+          <th class="cast-data__header--modify">修正</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sth.each do |row| %>
+          <% ['id', 'actor', 'character'].each do |name| %>
+            <tr>
+              <td class="cast-data__cell"><%= name %></td>
+              <% if name == 'id' %>
+                <td class="cast-data__cell"><%= row[name] %></td>
+              <% else %>
+                <td class="cast-data__cell"><input type="text" name="<% name %>" value="<%= row[name] %>"></td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+    <input type="submit" class="c-action-button" value="修正を実行">
+  </form>
+</div>
+<footer class="footer">
+  <p class="footer__text">ここはフッターコンテントです</p>
+</footer>
+<script src="./dist/js/vendor.js"></script>
+<script src="./dist/js/app.js"></script>
+</body>
+</html>

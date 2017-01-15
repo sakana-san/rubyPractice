@@ -45,11 +45,33 @@ server.config[:MimeTypes]["erb"] = "text/html"
 # 基本的には1ページずつブランチを作って、feature/ruby_production_application_dev_mountingにmergeしていく
 # -------------------------------------------------------------------------------------
 
+
+
+# 初期化の処理
+
+server.mount_proc("/init") { |req, res|
+  p "初期化の処理#{req.query}"
+  # dbhを作成する
+  @dbh = DBI.connect("DBI:SQLite3:hanabi.db")
+
+  @dbh.do("drop table if exists hanabi")
+  @dbh.do("create table hanabi(
+    id         varchar(50)       not null,
+    actor      varchar(100)     not null,
+    character  varchar(100)  not null,
+    primary    key(id)
+  );")
+  template = ERB.new(File.read('inited.erb'))
+  res.body << template.result(binding)
+}
+
 # 一覧表示の処理(list.erb)
 server.mount_proc("/list") { |req, res|
   p "一覧の処理#{req.query}"
   # 'operation'値の後の（.delete, .edit）で処理を分岐する
   if /(.*)\.(delete|edit)$/ =~ req.query['operation']
+    target_id = $1
+    operation = $2
     template = ERB.new(File.read('delete.erb')) if operation == 'delete'
     template = ERB.new(File.read('edit.erb')) if operation == 'edit'
     res.body << template.result(binding)
@@ -87,7 +109,7 @@ server.mount_proc("/entry") { |req, res|
   end
 }
 
-# データ登録の処理(search.erb)
+# データ検索の処理(search.erb)
 server.mount_proc("/search") { |req, res|
 
   p "データの検索#{req.query}"
@@ -108,6 +130,20 @@ server.mount_proc("/search") { |req, res|
   template = ERB.new(File.read('searched.erb'))
   res.body << template.result(binding)
 }
+
+# データ修正の処理(edit.erb)
+server.mount_proc("/edit") { |req, res|
+  # dbhを作成する
+  @dbh = DBI.connect("DBI:SQLite3:hanabi.db")
+  @dbh.do("update hanabi set \
+    actor='#{req.query['actor']}',\
+    character='#{req.query['character']}'\
+    where id='#{req.query['id']}';")
+  @dbh.disconnect
+  template =  ERB.new(File.read('edited.erb'))
+  res.body << template.result(binding)
+}
+
 
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく
 trap(:INT) do
