@@ -133,6 +133,9 @@ server.mount_proc("/search") { |req, res|
 
 # データ修正の処理(edit.erb)
 server.mount_proc("/edit") { |req, res|
+
+  p "データの修正#{req.query}"
+
   # dbhを作成する
   @dbh = DBI.connect("DBI:SQLite3:hanabi.db")
   @dbh.do("update hanabi set \
@@ -144,6 +147,20 @@ server.mount_proc("/edit") { |req, res|
   res.body << template.result(binding)
 }
 
+# データ削除の処理(delete.erb)
+server.mount_proc("/delete") { |req, res|
+
+  p "データの削除#{req.query}"
+
+  # dbhを作成する
+  @dbh = DBI.connect("DBI:SQLite3:hanabi.db")
+
+  @dbh.do("delete from hanabi where id='#{req.query['id']}';")
+
+  @dbh.disconnect
+  template =  ERB.new(File.read('deleted.erb'))
+  res.body << template.result(binding)
+}
 
 # Ctrl-C割り込みがあった場合にサーバーを停止する処理を登録しておく
 trap(:INT) do

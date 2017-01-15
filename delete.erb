@@ -1,5 +1,9 @@
 <%# -*- coding: utf-8 -*-%>
 <% require 'dbi' %>
+<% # dbhを作成し、データベースに接続する %>
+<% @dbh = DBI.connect('DBI:SQLite3:hanabi.db') %>
+<% # テーブルから削除対処データを読み込む %>
+<% @row = @dbh.select_one("select * from hanabi where id=\'#{target_id}\'") %>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -16,30 +20,32 @@
 <div class="cast-management">
   <div class="cast-management__label">
     <h1 class="cast-management__heading">打ち上げ花火下から見るか、横から見るかキャスト管理</h1>
-    <p class="cast-management__description">検索条件を入力してください</p>
+    <p class="cast-management__description">このデータを削除します</p>
   </div>
   <ul class="c-menu-list--related">
-    <li class="c-menu-list__item"><a href="list.erb">出演者の表示</a></li>
+    <li class="c-menu-list__item"><a href="list.erb">出演者の登録</a></li>
     <li class="c-menu-list__item"><a href="./">メニューに戻る</a></li>
   </ul>
-  <form method="post" action="search">
+  <form method="post" action="delete">
+    <input type="hidden" name="id" value="<%= target_id %>">
     <table class="cast-data">
       <thead>
-      <tr>
-        <th class="cast-data__header--subject">項目名</th>
-        <th class="cast-data__header">入力データ</th>
-      </tr>
+        <tr>
+          <th class="cast-data__header--subject">項目名</th>
+          <th class="cast-data__header">削除データ</th>
+        </tr>
       </thead>
       <tbody>
-      <% ['id', 'actor', 'character' ].each do |name| %>
-        <tr>
-          <td class="cast-data__cell--subject"><%= name %></td>
-          <td class="cast-data__cell"><input type="text" name="<%= name %>"></td>
-        </tr>
-      <% end %>
+        <% @row.each_with_name do |value, name| %>
+          <tr>
+            <td class="cast-data__cell"><%= name %></td>
+            <td class="cast-data__cell"><%= value.to_s %></td>
+            <input type="hidden" name="<%= name %>" value="<%= value.to_s %>">
+          </tr>
+        <% end %>
       </tbody>
     </table>
-    <input type="submit" class="c-action-button" value="検索を実行">
+    <input type="submit" class="c-action-button" value="削除を実行">
   </form>
 </div>
 <footer class="footer">

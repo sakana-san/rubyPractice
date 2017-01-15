@@ -17,6 +17,7 @@
   margin-bottom: 10px
   border-spacing: 1px
   &__header
+    @extend %th-cell
     &--delete,
     &--modify
       @extend %th-cell
@@ -26,7 +27,6 @@
       width: 60px
     &--id,
     &--character,
-    &--input,
     &--subject
       @extend %th-cell
   &__cell
