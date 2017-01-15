@@ -1,0 +1,25 @@
+.c-menu-list
+  &__item
+    > a
+      display: block
+      margin-bottom: 6px
+      padding: 10px
+      background: #ddd
+      box-sizing: border-box
+      text-align: center
+      color: #4a4a4a
+      font-size: 12px
+      font-weight: bold
+      text-decoration: none
+      cursor: pointer
+      &:hover
+        background: #f1f1f1
+  &--related
+    @extend %clearfix
+    @extend .c-menu-list
+    margin-bottom: 20px
+    .c-menu-list__item
+      float: left
+      > a
+        margin-right: 10px
+        margin-bottom: 0

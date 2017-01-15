@@ -1,0 +1,41 @@
+%th-cell
+  padding: 5px 10px
+  border: 1px solid #fff
+  box-shadow: 0px 0px 0px 1px #ccc
+  font-size: 12px
+  font-weight: normal
+  text-align: center
+  background: #00bbdd
+  color: #fff
+%td-cell
+  @extend %th-cell
+  background-color: #fff
+  color: #4a4a4a
+
+.cast-data
+  width: 100%
+  margin-bottom: 10px
+  border-spacing: 1px
+  &__header
+    @extend %th-cell
+    &--delete,
+    &--modify
+      @extend %th-cell
+      width: 26px
+    &--actor
+      @extend %th-cell
+      width: 60px
+    &--id,
+    &--character,
+    &--subject
+      @extend %th-cell
+  &__cell
+    @extend %td-cell
+    &:nth-child(5)
+      text-align: left
+    &--subject
+      @extend %td-cell
+      text-align: left
+
+input[type="text"]
+  width: 100%
