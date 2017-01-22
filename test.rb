@@ -70,10 +70,9 @@ class HanabiCasting
     if hanabi.name != '' && hanabi.desc != ''
       @cast.each do |index, value|
         flag = 1
-        check = 0
         flag = 0 if hanabi.name =~ /^"#{value.name}"/
         flag = 0 if hanabi.desc != value.desc
-        @foundCast[key] = value if flag == 1 && check < 1
+        @foundCast[key] = value if flag == 1
       end
       puts "指定された項目が入力されていません" if @foundCast.size < 1
       puts "\n-----------------------------"
