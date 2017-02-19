@@ -64,9 +64,7 @@ class HanabiCasting
     hanabi.name = gets.chomp
     print '役柄:'
     hanabi.desc = gets.chomp
-
     @foundCast = {}
-
     if hanabi.name != '' && hanabi.desc != ''
       @cast.each do |index, value|
         flag = 1
